@@ -7,8 +7,48 @@ import SmartIrrigationTipCard from "@/components/SmartIrrigationTipCard";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useQuery } from "@tanstack/react-query";
 
+// Define the type for farm data
+interface FarmData {
+  farmer: {
+    id: number;
+    name: string;
+  };
+  farm: {
+    id: number;
+    name?: string;
+    status: string;
+  };
+  waterQuality: Array<{
+    name: string;
+    value: string | number;
+    unit?: string;
+    status: string;
+    icon: "ph" | "tds" | "temp";
+  }>;
+  soilMoisture: {
+    level: number;
+    status: string;
+    fields: Array<{
+      id: number;
+      name: string;
+      value: number;
+      status: "optimal" | "warning" | "danger";
+    }>;
+  };
+  waterPrediction: {
+    message: string;
+    advice: string;
+    forecast: Array<{
+      day: string;
+      temperature: string;
+      weather: "sunny" | "cloudy" | "rainy" | "partly-cloudy";
+    }>;
+  };
+  irrigationTip: string;
+}
+
 const Home = () => {
-  const { data: farmData, isLoading } = useQuery({
+  const { data: farmData, isLoading } = useQuery<FarmData>({
     queryKey: ["/api/farm-data"],
   });
 
