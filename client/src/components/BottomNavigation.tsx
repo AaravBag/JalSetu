@@ -37,7 +37,7 @@ const BottomNavigation = () => {
         <div className="bg-white border-t border-gray-100 px-4 py-2 flex items-center justify-around shadow-lg rounded-t-3xl">
           {navItems.map((item) => (
             <Link key={item.name} href={item.path}>
-              <a className="flex flex-col items-center py-2 px-3 rounded-xl transition-colors duration-200 hover:bg-gray-50">
+              <div className="flex flex-col items-center py-2 px-3 rounded-xl transition-colors duration-200 hover:bg-gray-50 cursor-pointer">
                 <div 
                   className={`p-1.5 rounded-full mb-1 ${
                     item.active 
@@ -54,7 +54,7 @@ const BottomNavigation = () => {
                 >
                   {item.name}
                 </span>
-              </a>
+              </div>
             </Link>
           ))}
         </div>

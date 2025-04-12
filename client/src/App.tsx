@@ -7,6 +7,7 @@ import Home from "@/pages/Home";
 import Reports from "@/pages/Reports";
 import Alerts from "@/pages/Alerts";
 import Settings from "@/pages/Settings";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function Router() {
   return (
@@ -23,8 +24,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
+      <ThemeProvider>
+        <Router />
+        <Toaster />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
