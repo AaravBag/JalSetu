@@ -13,10 +13,17 @@ const Home = () => {
   });
 
   return (
-    <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-white pb-20">
+    <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 pb-20">
+      {/* Decorative top background pattern */}
+      <div className="absolute top-0 left-0 right-0 h-56 overflow-hidden z-0 opacity-40">
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-primary opacity-10"></div>
+        <div className="absolute top-20 -left-10 w-36 h-36 rounded-full bg-secondary opacity-10"></div>
+        <div className="absolute top-0 right-1/4 w-24 h-24 rounded-full bg-accent opacity-10"></div>
+      </div>
+      
       <Header />
       
-      <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto">
+      <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto z-10">
         {isLoading ? (
           <div className="flex flex-col gap-4 mt-4">
             <div className="h-24 bg-gray-100 animate-pulse rounded-2xl"></div>
@@ -26,7 +33,7 @@ const Home = () => {
             <div className="h-40 bg-gray-100 animate-pulse rounded-2xl"></div>
           </div>
         ) : (
-          <>
+          <div className="space-y-6">
             <WelcomeCard 
               farmerName={farmData?.farmer.name || "Farmer"} 
               farmStatus={farmData?.farm.status || "Loading farm status..."} 
@@ -51,7 +58,7 @@ const Home = () => {
             <SmartIrrigationTipCard 
               tip={farmData?.irrigationTip || ""}
             />
-          </>
+          </div>
         )}
       </main>
       

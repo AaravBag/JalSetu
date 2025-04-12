@@ -1,4 +1,4 @@
-import { Shrub } from "lucide-react";
+import { Shrub, DropletIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface FieldReading {
@@ -28,14 +28,20 @@ const SoilMoistureCard = ({
   const getStatusClass = (status: string) => {
     switch (status) {
       case "optimal":
-        return "bg-primary bg-opacity-20 text-primary";
+        return "bg-primary/10 text-primary border-primary/20";
       case "warning":
-        return "bg-status-warning bg-opacity-20 text-status-warning";
+        return "bg-amber-50 text-amber-600 border-amber-200";
       case "danger":
-        return "bg-status-danger bg-opacity-20 text-status-danger";
+        return "bg-red-50 text-red-600 border-red-200";
       default:
-        return "bg-primary bg-opacity-20 text-primary";
+        return "bg-primary/10 text-primary border-primary/20";
     }
+  };
+
+  const getMoistureColor = (level: number) => {
+    if (level >= 60) return "text-primary";
+    if (level >= 40) return "text-amber-500";
+    return "text-red-500";
   };
 
   // Default field readings if none provided
@@ -47,54 +53,69 @@ const SoilMoistureCard = ({
   const readings = fieldReadings.length ? fieldReadings : defaultFieldReadings;
 
   return (
-    <div className="mb-6">
+    <div className="mb-5">
       <h3 className="text-lg font-bold mb-3 flex items-center">
-        <Shrub className="h-5 w-5 text-primary mr-2" />
+        <div className="rounded-full bg-green-100 p-1 mr-2">
+          <Shrub className="h-4 w-4 text-primary" />
+        </div>
         Soil Moisture
       </h3>
       
-      <Card className="bg-neutral-light rounded-2xl shadow-sm">
-        <CardContent className="p-4">
+      <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0">
+        <CardContent className="p-5">
           <div className="flex items-center">
-            <div className="w-24 h-24 relative flex items-center justify-center">
-              <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
-                <circle 
-                  className="text-gray-200" 
-                  strokeWidth="10" 
-                  stroke="currentColor" 
-                  fill="transparent" 
-                  r="40" 
-                  cx="50" 
-                  cy="50"
-                />
-                <circle 
-                  className="text-primary" 
-                  strokeWidth="10" 
-                  strokeLinecap="round" 
-                  stroke="currentColor" 
-                  fill="transparent" 
-                  r="40" 
-                  cx="50" 
-                  cy="50"
-                  strokeDasharray="251.2"
-                  strokeDashoffset={calculateOffset(moistureLevel)}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xl font-bold">{moistureLevel}%</span>
+            <div className="relative">
+              <div className="w-[100px] h-[100px] relative flex items-center justify-center">
+                <svg className="w-[100px] h-[100px] transform -rotate-90" viewBox="0 0 100 100">
+                  <circle 
+                    className="text-gray-100" 
+                    strokeWidth="8" 
+                    stroke="currentColor" 
+                    fill="transparent" 
+                    r="40" 
+                    cx="50" 
+                    cy="50"
+                  />
+                  <circle 
+                    className={`${getMoistureColor(moistureLevel)}`}
+                    strokeWidth="8" 
+                    strokeLinecap="round" 
+                    stroke="currentColor" 
+                    fill="transparent" 
+                    r="40" 
+                    cx="50" 
+                    cy="50"
+                    strokeDasharray="251.2"
+                    strokeDashoffset={calculateOffset(moistureLevel)}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className={`text-2xl font-bold ${getMoistureColor(moistureLevel)}`}>
+                    {moistureLevel}%
+                  </span>
+                  <span className="text-[10px] text-gray-500 font-medium -mt-1">MOISTURE</span>
+                </div>
+              </div>
+              <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                <div className="absolute -right-1 top-1/4 opacity-20">
+                  <DropletIcon className={`h-5 w-5 ${getMoistureColor(moistureLevel)}`} />
+                </div>
+                <div className="absolute -left-2 bottom-1/4 opacity-10">
+                  <DropletIcon className={`h-8 w-8 ${getMoistureColor(moistureLevel)}`} />
+                </div>
               </div>
             </div>
             
-            <div className="flex-1 ml-4">
-              <h4 className="font-bold">{moistureStatus}</h4>
-              <p className="text-sm text-gray-600">
+            <div className="flex-1 ml-5">
+              <h4 className="font-bold text-gray-800">{moistureStatus}</h4>
+              <p className="text-sm text-gray-600 mt-1">
                 Current soil moisture is optimal for your crops.
               </p>
-              <div className="mt-2 flex space-x-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {readings.map((field) => (
                   <span 
                     key={field.id}
-                    className={`px-2 py-1 rounded-lg text-xs ${getStatusClass(field.status)}`}
+                    className={`px-3 py-1 rounded-full text-xs border ${getStatusClass(field.status)} font-medium shadow-sm`}
                   >
                     {field.name}: {field.value}%
                   </span>
