@@ -3,8 +3,40 @@
 @tailwind utilities;
 
 @layer base {
+  html, body, #root {
+    @apply h-full overflow-hidden bg-blue-100 dark:bg-gray-900;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   * {
     @apply border-border;
+  }
+
+  :root {
+    --theme-transition-duration: 0.3s;
+    --theme-transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Add transition to all elements that might change with theme */
+  *, *::before, *::after {
+    transition: background-color var(--theme-transition-duration) var(--theme-transition-ease),
+                border-color var(--theme-transition-duration) var(--theme-transition-ease),
+                color var(--theme-transition-duration) var(--theme-transition-ease),
+                fill var(--theme-transition-duration) var(--theme-transition-ease),
+                stroke var(--theme-transition-duration) var(--theme-transition-ease),
+                opacity var(--theme-transition-duration) var(--theme-transition-ease),
+                box-shadow var(--theme-transition-duration) var(--theme-transition-ease);
+  }
+
+  /* Exclude certain elements from transition */
+  .no-theme-transition,
+  .no-theme-transition *,
+  .no-theme-transition *::before,
+  .no-theme-transition *::after {
+    transition: none !important;
   }
 
   body {
@@ -38,6 +70,13 @@
     
     color-scheme: dark;
   }
+
+  /* Disable transitions when user prefers reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition: none !important;
+    }
+  }
 }
 
 @layer components {
@@ -51,6 +90,122 @@
   
   .gradient-bg {
     @apply bg-gradient-to-br from-primary to-blue-500 dark:from-primary/80 dark:to-blue-600;
+  }
+
+  /* Liquid Toggle Styles */
+  .liquid-toggle {
+    --toggle-width: 3.5rem;
+    --toggle-height: calc(var(--toggle-width) / 2);
+    --toggle-padding: 0.125rem;
+    
+    appearance: none;
+    position: relative;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    background: #e5e7eb;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+    overflow: hidden;
+    
+    &::before {
+      content: "";
+      position: absolute;
+      left: var(--toggle-padding);
+      top: 50%;
+      transform: translateY(-50%);
+      width: calc(var(--toggle-height) - (var(--toggle-padding) * 4));
+      height: calc(var(--toggle-height) - (var(--toggle-padding) * 4));
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.5s cubic-bezier(0.85, 0.05, 0.18, 1.35);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: #60a5fa;
+      border-radius: 999px;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.85, 0.05, 0.18, 1.35);
+      opacity: 0;
+    }
+    
+    &:checked {
+      background: #60a5fa;
+      
+      &::before {
+        transform: translate(calc(var(--toggle-width) - 100% - (var(--toggle-padding) * 2)), -50%);
+        background: white;
+      }
+
+      &::after {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    &:focus-visible {
+      border-color: #60a5fa;
+      outline: none;
+    }
+
+    &:hover::before {
+      transform: translate(2px, -50%);
+    }
+
+    &:checked:hover::before {
+      transform: translate(calc(var(--toggle-width) - 100% - (var(--toggle-padding) * 2) - 2px), -50%);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      
+      &::before {
+        background: #e5e7eb;
+      }
+    }
+  }
+
+  .dark .liquid-toggle {
+    background: #1f2937;
+
+    &::before {
+      background: #4b5563;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    &:checked {
+      background: #1f2937;
+      
+      &::before {
+        background: #60a5fa;
+      }
+
+      &::after {
+        background: #3b82f6;
+        opacity: 0.2;
+      }
+    }
+
+    &:focus-visible {
+      border-color: #3b82f6;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      
+      &::before {
+        background: #374151;
+      }
+    }
   }
 
   /* Animation classes */
@@ -92,5 +247,48 @@
   
   .ripple-effect::after {
     @apply content-[''] absolute w-full h-full top-0 left-0 bg-white/30 rounded-full scale-0 animate-ripple;
+  }
+
+  /* Background decorations */
+  .water-decoration {
+    @apply fixed inset-0 pointer-events-none overflow-hidden -z-10;
+  }
+
+  .water-drop {
+    @apply absolute w-4 h-4 rounded-full bg-blue-400/10 dark:bg-blue-500/10;
+    animation: float 20s infinite ease-in-out;
+  }
+
+  .water-ripple {
+    @apply absolute rounded-full border-2 border-blue-300/20 dark:border-blue-400/20;
+    animation: ripple 8s infinite ease-out;
+  }
+
+  .wave-pattern {
+    @apply absolute w-64 h-64 opacity-10;
+    background: radial-gradient(circle at center, transparent 30%, #3b82f6 70%);
+    filter: blur(40px);
+    animation: pulse 10s infinite ease-in-out;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.1); }
+  }
+
+  @keyframes ripple {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.1; }
+    50% { transform: scale(1.2) rotate(180deg); opacity: 0.2; }
+  }
+
+  /* App container with glass effect */
+  .app-container {
+    @apply relative w-full max-w-md mx-auto h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
   }
 }

@@ -4,10 +4,13 @@ import { storage } from "./storage";
 import { db } from "./db";
 import { z } from "zod";
 import { insertUserSchema, insertFarmSchema, insertFieldSchema, insertWaterQualitySchema, insertSoilMoistureSchema, insertWeatherPredictionSchema, insertIrrigationTipSchema } from "@shared/schema";
+import { generateSensorData } from './services/gemini.js';
+import { getNoidaWeather } from './services/weather';
+import { generateFarmAdvice } from './services/gemini';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Middleware to handle errors
-  const asyncHandler = (fn: (req: Request, res: Response) => Promise<void>) => 
+  const asyncHandler = (fn: (req: Request, res: Response) => Promise<any>) => 
     (req: Request, res: Response) => {
       Promise.resolve(fn(req, res)).catch(err => {
         console.error("API Error:", err);
@@ -73,7 +76,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Soil Moisture routes
   app.post("/api/soil-moistures", asyncHandler(async (req, res) => {
     const moistureData = insertSoilMoistureSchema.parse(req.body);
-    const moisture = await storage.createSoilMoisture(moistureData);
+    
+    // Generate sensor data using Gemini
+    const sensorData = await generateSensorData(moistureData.fieldId);
+    
+    // Create soil moisture record with generated data
+    const moisture = await storage.createSoilMoisture({
+      ...moistureData,
+      moistureLevel: sensorData.soilMoisture,
+      status: sensorData.soilMoisture > 60 ? "optimal" : sensorData.soilMoisture > 40 ? "warning" : "danger"
+    });
+
+    // Create water quality record with generated data
+    await storage.createWaterQuality({
+      farmId: moistureData.farmId,
+      phLevel: sensorData.phLevel.toFixed(1),
+      tds: `${Math.round(sensorData.tds)} ppm`,
+      clarity: sensorData.clarity
+    });
+
     res.status(201).json(moisture);
   }));
 
@@ -94,61 +115,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Dashboard data routes
   app.get("/api/farm-data", asyncHandler(async (req, res) => {
     try {
-      // If there's no farm data in the database yet, return mock data
-      // In production, you'd typically require farmId as a parameter
-      const farmId = 1;
+      console.log('Starting to fetch farm data...');
+
+      // Get real weather data for Noida
+      console.log('Fetching weather data...');
+      const weatherData = await getNoidaWeather().catch(error => {
+        console.error('Weather API error:', error);
+        throw new Error(`Weather API failed: ${error.message}`);
+      });
+      console.log('Weather data received:', weatherData);
       
-      // Check if farm exists in the database
-      const farm = await storage.getFarm(farmId);
+      // Get sensor data for AI advice
+      console.log('Generating sensor data...');
+      const sensorData = await generateSensorData(1).catch(error => {
+        console.error('Sensor data generation error:', error);
+        throw new Error(`Sensor data generation failed: ${error.message}`);
+      });
+      console.log('Sensor data generated:', sensorData);
       
-      if (farm) {
-        // If farm exists, get dashboard data from database
-        const dashboardData = await storage.getFarmDashboardData(farmId);
-        res.json(dashboardData);
-      } else {
-        // If farm does not exist, return mock data for demo purposes
-        // In a real application, you should initialize the database with seed data
-        const mockFarmData = {
-          farmer: {
-            id: 1,
-            name: "Ramesh",
-          },
-          farm: {
-            id: 1,
-            name: "Green Valley Farm",
-            status: "Your farm is thriving",
-            location: "Karnataka"
-          },
-          waterQuality: [
-            { name: "pH Level", value: "6.8", status: "Good", icon: "ph" },
-            { name: "TDS", value: "320", unit: "ppm", status: "Good", icon: "tds" },
-            { name: "Temp", value: "28°C", status: "Warm", icon: "temp" }
-          ],
-          soilMoisture: {
-            level: 68,
-            status: "Ideal Moisture Level",
-            fields: [
-              { id: 1, name: "Field 1", value: 68, status: "optimal" },
-              { id: 2, name: "Field 2", value: 45, status: "warning" }
-            ]
-          },
-          waterPrediction: {
-            message: "Rain expected in 2 days",
-            advice: "Delay irrigation to save water and energy.",
-            forecast: [
-              { day: "Today", temperature: "32°C", weather: "sunny" },
-              { day: "Tomorrow", temperature: "30°C", weather: "partly-cloudy" },
-              { day: "Thu", temperature: "27°C", weather: "rainy" }
-            ]
-          },
-          irrigationTip: "Based on your soil type and current moisture levels, water your crops early morning (5-7 AM) to minimize evaporation and maximize absorption."
-        };
-        
-        res.json(mockFarmData);
-      }
+      // Generate AI advice based on both sensor data and weather
+      console.log('Generating AI advice...');
+      const aiAdvice = await generateFarmAdvice({
+        ...sensorData,
+        weatherForecast: weatherData.forecast
+      }).catch(error => {
+        console.error('AI advice generation error:', error);
+        throw new Error(`AI advice generation failed: ${error.message}`);
+      });
+      console.log('AI advice generated:', aiAdvice);
+
+      // Create weather prediction record
+      console.log('Creating weather prediction record...');
+      const weatherPrediction = await storage.createWeatherPrediction({
+        farmId: 1,
+        message: weatherData.message,
+        advice: weatherData.advice,
+        forecast: JSON.stringify(weatherData.forecast)
+      }).catch(error => {
+        console.error('Weather prediction creation error:', error);
+        throw new Error(`Weather prediction creation failed: ${error.message}`);
+      });
+      console.log('Weather prediction created:', weatherPrediction);
+
+      // Create new irrigation tip
+      console.log('Creating irrigation tip...');
+      const irrigationTip = await storage.createIrrigationTip({
+        farmId: 1,
+        tip: aiAdvice.suggestion
+      }).catch(error => {
+        console.error('Irrigation tip creation error:', error);
+        throw new Error(`Irrigation tip creation failed: ${error.message}`);
+      });
+      console.log('Irrigation tip created:', irrigationTip);
+
+      const farmData = {
+        farmer: {
+          id: 1,
+          name: "Ramesh",
+        },
+        farm: {
+          id: 1,
+          name: "Green Valley Farm",
+          status: aiAdvice.status,
+          location: "Noida"
+        },
+        waterQuality: [
+          { name: "pH Level", value: sensorData.phLevel.toFixed(1), status: "Good", icon: "ph" },
+          { name: "TDS", value: `${Math.round(sensorData.tds)} ppm`, status: "Good", icon: "tds" },
+          { name: "Clarity", value: sensorData.clarity, status: "Good", icon: "clarity" }
+        ],
+        soilMoisture: {
+          level: sensorData.soilMoisture,
+          status: sensorData.soilMoisture > 60 ? "Ideal Moisture Level" : 
+                 sensorData.soilMoisture > 40 ? "Moderate Moisture Level" : "Low Moisture Level",
+          fields: [
+            { id: 1, name: "Field 1", value: sensorData.soilMoisture, status: "optimal" }
+          ]
+        },
+        waterPrediction: {
+          message: weatherPrediction.message,
+          advice: weatherPrediction.advice,
+          forecast: weatherData.forecast
+        },
+        irrigationTip: irrigationTip.tip
+      };
+      
+      console.log('Sending response...');
+      return res.json(farmData);
     } catch (error) {
-      console.error("Error fetching farm data:", error);
-      res.status(500).json({ message: "Failed to fetch farm data" });
+      console.error("Error in farm data endpoint:", error);
+      if (error instanceof Error) {
+        console.error("Error details:", {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+      }
+      res.status(500).json({ 
+        message: "Failed to fetch farm data",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
     }
   }));
 
@@ -156,7 +222,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/seed-database", asyncHandler(async (req, res) => {
     // Create user
     const user = await storage.createUser({
-      username: "Ramesh",
+      name: "Ramesh",
+      email: "ramesh@example.com",
       password: "password123" // In production, this should be hashed
     });
 
@@ -184,7 +251,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       farmId: farm.id,
       phLevel: "6.8",
       tds: "320 ppm",
-      temperature: "28°C"
+      clarity: "Clear"
     });
 
     // Create soil moistures
@@ -207,11 +274,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       farmId: farm.id,
       message: "Rain expected in 2 days",
       advice: "Delay irrigation to save water and energy.",
-      forecast: [
-        { day: "Today", temperature: "32°C", weather: "sunny" },
-        { day: "Tomorrow", temperature: "30°C", weather: "partly-cloudy" },
-        { day: "Thu", temperature: "27°C", weather: "rainy" }
-      ]
+      forecast: JSON.stringify([
+        { 
+          day: "Today", 
+          temperature: "32°C", 
+          weather: "sunny",
+          humidity: 65,
+          wind: "10 km/h",
+          uvIndex: 6,
+          chanceOfRain: 0
+        },
+        { 
+          day: "Tomorrow", 
+          temperature: "30°C", 
+          weather: "partly-cloudy",
+          humidity: 70,
+          wind: "12 km/h",
+          uvIndex: 5,
+          chanceOfRain: 20
+        },
+        { 
+          day: "Thu", 
+          temperature: "27°C", 
+          weather: "rainy",
+          humidity: 85,
+          wind: "15 km/h",
+          uvIndex: 3,
+          chanceOfRain: 80
+        }
+      ])
     });
 
     // Create irrigation tip

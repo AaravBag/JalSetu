@@ -1,3 +1,4 @@
+import React from 'react';
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -8,6 +9,7 @@ import Reports from "@/pages/Reports";
 import Alerts from "@/pages/Alerts";
 import Settings from "@/pages/Settings";
 import { ThemeProvider } from "./context/ThemeContext";
+import WaterBackground from "@/components/WaterBackground";
 
 function Router() {
   return (
@@ -25,8 +27,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <Router />
-        <Toaster />
+        <div className="fixed inset-0">
+          <WaterBackground />
+          <div className="relative h-full w-full flex justify-center">
+            <div className="w-full max-w-md h-full flex flex-col bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm">
+              <Router />
+              <Toaster />
+            </div>
+          </div>
+        </div>
       </ThemeProvider>
     </QueryClientProvider>
   );

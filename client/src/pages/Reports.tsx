@@ -52,14 +52,14 @@ const Reports = () => {
     setActiveReport(null);
   };
   return (
-    <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pb-20 transition-colors duration-300">
+    <div className="w-full min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pb-20 transition-colors duration-300">
       {/* Decorative top background pattern */}
-      <div className="absolute top-0 left-0 right-0 h-56 overflow-hidden z-0 opacity-40">
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-primary opacity-10 animate-pulse"></div>
-        <div className="absolute top-20 -left-10 w-36 h-36 rounded-full bg-secondary opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-0 left-0 right-0 h-72 overflow-hidden z-0 opacity-40">
+        <div className="absolute -top-10 -right-10 w-64 h-64 rounded-full bg-primary opacity-10 animate-pulse"></div>
+        <div className="absolute top-20 -left-10 w-48 h-48 rounded-full bg-secondary opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
       
-      <header className="px-6 pt-12 pb-4 relative z-10">
+      <header className="px-4 pt-8 pb-4 relative z-10">
         <div className="flex items-center justify-between">
           {activeReport ? (
             <button 
@@ -83,7 +83,7 @@ const Reports = () => {
         </div>
       </header>
       
-      <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto z-10">
+      <main className="flex-1 px-4 pt-2 pb-4 overflow-y-auto z-10">
         {activeReport ? (
           // Detailed report view
           <div className="space-y-6 slide-in-right">

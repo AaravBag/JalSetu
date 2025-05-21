@@ -12,8 +12,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize state from localStorage if available
   const [darkMode, setDarkMode] = useState(() => {
+    // Check system preference first if no saved preference
     const savedMode = localStorage.getItem('darkMode');
-    return savedMode ? JSON.parse(savedMode) : false;
+    if (savedMode !== null) {
+      return JSON.parse(savedMode);
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
   
   const [animationsEnabled, setAnimationsEnabled] = useState(() => {
@@ -21,15 +25,36 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return savedAnimations ? JSON.parse(savedAnimations) : true;
   });
 
-  // Update localStorage when state changes
+  // Update localStorage and apply theme
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    const root = document.documentElement;
+    
+    // Add transition classes before changing theme
+    root.classList.add('transition-colors', 'duration-200');
+    
     if (darkMode) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      // Update meta theme-color for mobile browsers
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1a1b1e');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#ffffff');
     }
   }, [darkMode]);
+
+  // Handle system theme changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (localStorage.getItem('darkMode') === null) {
+        setDarkMode(e.matches);
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('animationsEnabled', JSON.stringify(animationsEnabled));

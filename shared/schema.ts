@@ -1,4 +1,5 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, primaryKey } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -6,67 +7,70 @@ import { relations } from "drizzle-orm";
 // Define all tables first, then relations
 
 // User schema
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
   password: text("password").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });
 
 // Farm schema
-export const farms = pgTable("farms", {
-  id: serial("id").primaryKey(),
+export const farms = sqliteTable("farms", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   location: text("location").notNull(),
   userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   status: text("status").default("Your farm is thriving"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Fields schema (for soil moisture readings)
-export const fields = pgTable("fields", {
-  id: serial("id").primaryKey(),
+export const fields = sqliteTable("fields", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Water Quality schema
-export const waterQualities = pgTable("water_qualities", {
-  id: serial("id").primaryKey(),
+export const waterQualities = sqliteTable("water_qualities", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   phLevel: text("ph_level").notNull(),
   tds: text("tds").notNull(),
-  temperature: text("temperature").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  clarity: text("clarity").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Soil Moisture schema
-export const soilMoistures = pgTable("soil_moistures", {
-  id: serial("id").primaryKey(),
+export const soilMoistures = sqliteTable("soil_moistures", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   fieldId: integer("field_id").notNull().references(() => fields.id, { onDelete: "cascade" }),
   moistureLevel: integer("moisture_level").notNull(),
   status: text("status").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Weather Prediction schema
-export const weatherPredictions = pgTable("weather_predictions", {
-  id: serial("id").primaryKey(),
+export const weatherPredictions = sqliteTable("weather_predictions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   message: text("message").notNull(),
   advice: text("advice").notNull(),
-  forecast: jsonb("forecast").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  forecast: text("forecast").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Irrigation Tips schema
-export const irrigationTips = pgTable("irrigation_tips", {
-  id: serial("id").primaryKey(),
+export const irrigationTips = sqliteTable("irrigation_tips", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   tip: text("tip").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Define relations after all tables are defined
@@ -128,7 +132,8 @@ export const irrigationTipsRelations = relations(irrigationTips, ({ one }) => ({
 
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
+  name: true,
+  email: true,
   password: true,
 });
 
@@ -148,7 +153,7 @@ export const insertWaterQualitySchema = createInsertSchema(waterQualities).pick(
   farmId: true,
   phLevel: true,
   tds: true,
-  temperature: true,
+  clarity: true,
 });
 
 export const insertSoilMoistureSchema = createInsertSchema(soilMoistures).pick({
@@ -158,12 +163,23 @@ export const insertSoilMoistureSchema = createInsertSchema(soilMoistures).pick({
   status: true,
 });
 
-export const insertWeatherPredictionSchema = createInsertSchema(weatherPredictions).pick({
-  farmId: true,
-  message: true,
-  advice: true,
-  forecast: true,
-});
+export const insertWeatherPredictionSchema = createInsertSchema(weatherPredictions)
+  .pick({
+    farmId: true,
+    message: true,
+    advice: true,
+  })
+  .extend({
+    forecast: z.array(z.object({
+      day: z.string(),
+      temperature: z.string(),
+      weather: z.enum(["sunny", "cloudy", "rainy", "partly-cloudy"]),
+      humidity: z.number(),
+      wind: z.string(),
+      uvIndex: z.number(),
+      chanceOfRain: z.number()
+    })).transform(forecast => JSON.stringify(forecast))
+  });
 
 export const insertIrrigationTipSchema = createInsertSchema(irrigationTips).pick({
   farmId: true,

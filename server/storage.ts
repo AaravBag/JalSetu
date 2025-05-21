@@ -236,7 +236,7 @@ export class DatabaseStorage implements IStorage {
       waterQuality: waterQuality ? [
         { name: "pH Level", value: waterQuality.phLevel, status: "Good", icon: "ph" },
         { name: "TDS", value: waterQuality.tds, unit: "ppm", status: "Good", icon: "tds" },
-        { name: "Temp", value: waterQuality.temperature, status: "Warm", icon: "temp" }
+        { name: "Clarity", value: waterQuality.clarity || "Clear", status: "Good", icon: "clarity" }
       ] : [],
       soilMoisture: {
         level: 68, // Calculate the average moisture level
