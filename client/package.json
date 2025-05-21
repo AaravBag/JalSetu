@@ -12,9 +12,11 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "vite": "^6.3.5",
+    "@tailwindcss/postcss": "^4.1.7",
     "@vitejs/plugin-react": "^4.3.2",
-    "@replit/vite-plugin-shadcn-theme-json": "^0.0.4",
-    "@replit/vite-plugin-runtime-error-modal": "^0.0.3"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.7",
+    "vite": "^6.3.5"
   }
-} 
+}
