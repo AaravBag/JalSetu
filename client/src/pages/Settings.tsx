@@ -204,6 +204,8 @@ const Settings = () => {
                       className={`flex items-center justify-between p-4 ${
                         index !== section.items.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''
                       }`}
+                      onClick={item.onClick}
+                      style={{ cursor: item.onClick ? 'pointer' : 'default' }}
                     >
                       <div className="flex items-center">
                         <div className="w-9 h-9 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center mr-3">
