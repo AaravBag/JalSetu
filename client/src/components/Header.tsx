@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Header = () => {
   const { darkMode, toggleDarkMode } = useTheme();
+  const { t } = useLanguage();
   const { toast } = useToast();
   
   return (
