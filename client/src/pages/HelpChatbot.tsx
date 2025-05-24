@@ -39,6 +39,8 @@ export default function HelpChatbot() {
     { id: '2', question: 'What do the soil moisture readings mean?' },
     { id: '3', question: 'How to interpret water quality metrics?' },
     { id: '4', question: 'What is the optimal soil moisture level for rice?' },
+    { id: '5', question: 'How can I conserve water during drought?' },
+    { id: '6', question: 'What are the best watering practices for vegetables?' },
   ];
 
   useEffect(() => {
@@ -67,58 +69,58 @@ export default function HelpChatbot() {
     setIsLoading(true);
     
     try {
-      // We'll replace this with actual Gemini API call when we have the API key
-      // This is a placeholder for now
-      setTimeout(() => {
-        // Simulate bot response based on input
-        let responseText = '';
-        const input = inputValue.toLowerCase();
-        
-        if (input.includes('irrigation') || input.includes('water schedule')) {
-          responseText = 'For optimal irrigation, we recommend watering deeply but infrequently. This encourages roots to grow deeper and makes plants more drought-resistant. Check your soil moisture sensor readings daily and water when the level drops below 30%.';
-        } else if (input.includes('soil moisture')) {
-          responseText = 'Soil moisture readings indicate how much water is available to your plants. Optimal levels vary by crop type, but generally: 0-20% is dry (needs watering), 20-60% is ideal for most crops, and above 60% may indicate overwatering which can lead to root diseases.';
-        } else if (input.includes('water quality')) {
-          responseText = 'Water quality metrics include pH (acidity), TDS (dissolved solids), and temperature. Ideal pH ranges from 6.0-7.0 for most crops. High TDS (>1000 ppm) may indicate salinity issues. Water temperature should be close to soil temperature for optimal absorption.';
-        } else {
-          responseText = 'Thank you for your question. We\'ll provide you with expert answers once the Gemini AI integration is complete. For now, please try asking about irrigation schedules, soil moisture readings, or water quality metrics.';
-        }
-        
-        const botMessage: Message = {
-          id: Date.now().toString(),
-          text: responseText,
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        
-        setMessages(prev => [...prev, botMessage]);
-        setIsLoading(false);
-      }, 1500);
+      // Format message history for API
+      const messageHistory = messages
+        .filter(m => m.id !== '1') // Skip welcome message
+        .map(m => ({ 
+          role: m.sender, 
+          content: m.text 
+        }));
       
-      // Note: Here's where we'll integrate with Gemini API
-      // const response = await fetch('/api/chat', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ 
-      //     message: inputValue,
-      //     history: messages.map(m => ({ role: m.sender, content: m.text }))
-      //   }),
-      // });
-      // const data = await response.json();
-      // const botMessage: Message = {
-      //   id: Date.now().toString(),
-      //   text: data.response,
-      //   sender: 'bot',
-      //   timestamp: new Date(),
-      // };
-      // setMessages(prev => [...prev, botMessage]);
+      // Call our Gemini API endpoint
+      const response = await apiRequest('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          message: userMessage.text,
+          history: messageHistory
+        }),
+      });
       
-    } catch (error) {
+      // Parse the response and handle errors
+      const data = response as any;
+      if (data.error || !data.response) {
+        throw new Error(data.error || 'Empty response from server');
+      }
+      
+      // Add bot response to chat
+      const botMessage: Message = {
+        id: Date.now().toString(),
+        text: data.response,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error: any) {
+      console.error('Chatbot error:', error);
+      
+      // Create a fallback response
+      const fallbackMessage: Message = {
+        id: Date.now().toString(),
+        text: "I'm having trouble connecting to my knowledge base right now. Please check if the API key is properly set up or try again later.",
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, fallbackMessage]);
+      
       toast({
-        title: "Error",
-        description: "Failed to get a response. Please try again.",
+        title: "Connection Error",
+        description: error.message || "Failed to get a response from the AI. Please check your API key settings.",
         variant: "destructive",
       });
+    } finally {
       setIsLoading(false);
     }
   };
