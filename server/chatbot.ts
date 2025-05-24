@@ -104,9 +104,28 @@ export async function handleChatRequest(req: Request, res: Response) {
       );
       
       if (isApiKeyError) {
-        // Provide a helpful response about API key issues
+        // Use fallback predefined responses based on keywords in the message
+        const input = message.toLowerCase();
+        let responseText = '';
+        
+        if (input.includes('irrigation') || input.includes('water schedule')) {
+          responseText = 'For optimal irrigation, I recommend watering deeply but infrequently. This encourages roots to grow deeper and makes plants more drought-resistant. Check your soil moisture sensor readings daily and water when the level drops below 30%. Morning watering (5-7am) is best to minimize evaporation.';
+        } else if (input.includes('soil moisture')) {
+          responseText = 'Soil moisture readings indicate how much water is available to your plants. Optimal levels vary by crop type, but generally: 0-20% is dry (needs watering), 20-60% is ideal for most crops, and above 60% may indicate overwatering which can lead to root diseases.';
+        } else if (input.includes('water quality') || input.includes('ph') || input.includes('tds')) {
+          responseText = 'Water quality metrics include pH (acidity), TDS (dissolved solids), and temperature. Ideal pH ranges from 6.0-7.0 for most crops. High TDS (>1000 ppm) may indicate salinity issues. Water temperature should be close to soil temperature for optimal absorption.';
+        } else if (input.includes('rice') || input.includes('paddy')) {
+          responseText = 'Rice typically requires standing water during most of its growing season. The ideal water depth is 5-10cm. For soil moisture levels outside of flooding periods, maintain 70-80% saturation. Check water level daily, especially during hot weather.';
+        } else if (input.includes('drought') || input.includes('conserve')) {
+          responseText = 'During drought conditions, prioritize water for your most valuable crops. Use mulch to reduce evaporation, implement drip irrigation if possible, recycle household water when safe, and water at night or early morning. JalSetu sensors can help you optimize water usage.';
+        } else if (input.includes('vegetable') || input.includes('garden')) {
+          responseText = 'Vegetables generally need consistent moisture. Root vegetables need about 1 inch of water per week, leafy greens need more frequent watering with less volume, and fruiting vegetables like tomatoes need deep watering when the soil is dry 2 inches below the surface.';
+        } else {
+          responseText = "I'm having trouble accessing my AI knowledge base due to authentication issues. In the meantime, I can provide basic information about irrigation schedules, soil moisture readings, water quality metrics, and crop-specific advice. Please try asking specifically about these topics.";
+        }
+        
         return res.json({ 
-          response: "I'm having trouble accessing my knowledge base due to authentication issues. My AI capabilities will be available once the API key is properly configured. In the meantime, please try the preset FAQs which contain helpful information about water management for your farm.",
+          response: responseText,
           apiKeyError: true
         });
       }
