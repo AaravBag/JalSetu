@@ -6,16 +6,6 @@ import { Express, Request, Response, NextFunction } from 'express';
 import { storage } from './storage';
 import { User } from '@shared/schema';
 
-// Add this for typescript integration with passport
-declare global {
-  namespace Express {
-    interface User {
-      id: number;
-      username: string;
-    }
-  }
-}
-
 // Setup passport with local strategy
 export function setupAuth(app: Express) {
   // Configure express-session
@@ -62,8 +52,8 @@ export function setupAuth(app: Express) {
   );
 
   // Serialize user to the session
-  passport.serializeUser((user: Express.User, done) => {
-    done(null, (user as User).id);
+  passport.serializeUser((user: any, done) => {
+    done(null, user.id);
   });
 
   // Deserialize user from the session
@@ -85,7 +75,7 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
   res.status(401).json({ message: 'Unauthorized' });
 }
 
-// Helper to check if password is valid
+// Helper to hash password
 export async function hashPassword(password: string): Promise<string> {
   const salt = await bcrypt.genSalt(10);
   return bcrypt.hash(password, salt);
