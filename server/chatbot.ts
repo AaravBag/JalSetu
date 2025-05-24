@@ -96,6 +96,21 @@ export async function handleChatRequest(req: Request, res: Response) {
         });
       }
       
+      // Check if this is an API key error
+      const isApiKeyError = error.message && (
+        error.message.includes('API key') || 
+        error.message.includes('API_KEY_INVALID') || 
+        error.message.includes('authentication')
+      );
+      
+      if (isApiKeyError) {
+        // Provide a helpful response about API key issues
+        return res.json({ 
+          response: "I'm having trouble accessing my knowledge base due to authentication issues. My AI capabilities will be available once the API key is properly configured. In the meantime, please try the preset FAQs which contain helpful information about water management for your farm.",
+          apiKeyError: true
+        });
+      }
+      
       return res.status(500).json({ 
         error: 'Failed to get response from Gemini API',
         message: error.message 

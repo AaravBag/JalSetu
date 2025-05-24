@@ -109,6 +109,14 @@ export default function HelpChatbot() {
         });
       }
       
+      // If there's an API key error, let the user know
+      if (data.apiKeyError) {
+        toast({
+          title: "Connection Issue",
+          description: "The chatbot AI service needs a valid API key to be configured.",
+        });
+      }
+      
       setMessages(prev => [...prev, botMessage]);
     } catch (error: any) {
       console.error('Chatbot error:', error);
