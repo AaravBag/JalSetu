@@ -5,11 +5,27 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { useLocation } from "wouter";
 
 const Settings = () => {
   const { darkMode, toggleDarkMode, animationsEnabled, toggleAnimations } = useTheme();
   const [notifications, setNotifications] = useState(true);
   const { toast } = useToast();
+  const { user, logout } = useAuth();
+  const [, navigate] = useLocation();
+  
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        toast({
+          title: "Logged out successfully",
+          description: "You have been logged out of your account."
+        });
+        navigate('/login');
+      }
+    });
+  };
   
   const settingsSections = [
     {
@@ -102,7 +118,8 @@ const Settings = () => {
           id: "logout",
           label: "Logout",
           icon: <LogOut className="h-5 w-5 text-gray-500" />,
-          action: <ChevronRight className="h-5 w-5 text-gray-400" />
+          action: <ChevronRight className="h-5 w-5 text-gray-400" />,
+          onClick: handleLogout
         }
       ]
     }
@@ -142,8 +159,8 @@ const Settings = () => {
                   </div>
                 </div>
                 <div className="ml-4 text-white">
-                  <h2 className="text-xl font-bold">Ramesh</h2>
-                  <p className="text-blue-100">Green Valley Farm</p>
+                  <h2 className="text-xl font-bold">{user?.firstName || user?.username || "User"}</h2>
+                  <p className="text-blue-100">{user?.email || "JalSetu User"}</p>
                 </div>
               </div>
               

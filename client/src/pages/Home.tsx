@@ -95,17 +95,17 @@ const Home = () => {
             
             <div className="slide-in-right" style={{ animationDelay: '0.2s' }}>
               <SoilMoistureCard 
-                moistureLevel={farmData?.soilMoisture.level || 0}
-                moistureStatus={farmData?.soilMoisture.status || ""}
-                fieldReadings={farmData?.soilMoisture.fields || []}
+                moistureLevel={farmData?.soilMoisture?.level || 0}
+                moistureStatus={farmData?.soilMoisture?.status || ""}
+                fieldReadings={farmData?.soilMoisture?.fields || []}
               />
             </div>
             
             <div className="slide-in-left" style={{ animationDelay: '0.3s' }}>
               <WaterPredictionCard 
-                prediction={farmData?.waterPrediction.message || ""}
-                advice={farmData?.waterPrediction.advice || ""}
-                forecast={farmData?.waterPrediction.forecast || []}
+                prediction={farmData?.waterPrediction?.message || ""}
+                advice={farmData?.waterPrediction?.advice || ""}
+                forecast={farmData?.waterPrediction?.forecast || []}
               />
             </div>
             
