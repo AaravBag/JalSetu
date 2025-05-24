@@ -291,7 +291,7 @@ export default function HelpChatbot() {
           </Button>
         </form>
         <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">
-          Powered by Perplexity AI
+          JalSetu Farming Assistant
         </p>
       </div>
     </div>

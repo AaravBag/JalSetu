@@ -8,6 +8,7 @@ import passport from "passport";
 import { setupAuth, isAuthenticated, hashPassword } from "./auth";
 import { handleChatRequest } from "./chatbot";
 import { handlePerplexityChat } from "./perplexity";
+import { handleLocalChat } from "./localChatbot";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -372,10 +373,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }));
 
-  // Chatbot API endpoint - now using Perplexity AI
+  // Chatbot API endpoint - using local implementation
   app.post("/api/chat", asyncHandler(async (req, res) => {
-    // Use Perplexity API instead of Gemini
-    await handlePerplexityChat(req, res);
+    // Use local chatbot with built-in knowledge base
+    await handleLocalChat(req, res);
   }));
 
   const httpServer = createServer(app);
