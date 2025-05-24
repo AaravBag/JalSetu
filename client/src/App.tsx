@@ -11,6 +11,10 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import EditProfile from "@/pages/EditProfile";
 import HelpChatbot from "@/pages/HelpChatbot";
+import WaterQualityDetails from "@/pages/WaterQualityDetails";
+import SoilMoistureDetails from "@/pages/SoilMoistureDetails";
+import WaterPredictionDetails from "@/pages/WaterPredictionDetails";
+import IrrigationTipsDetails from "@/pages/IrrigationTipsDetails";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useAuth } from "./hooks/useAuth";
@@ -60,6 +64,22 @@ function Router() {
       
       <Route path="/help-chatbot">
         {() => <ProtectedRoute component={HelpChatbot} />}
+      </Route>
+      
+      <Route path="/water-quality/:id">
+        {() => <ProtectedRoute component={WaterQualityDetails} />}
+      </Route>
+      
+      <Route path="/soil-moisture/:id">
+        {() => <ProtectedRoute component={SoilMoistureDetails} />}
+      </Route>
+      
+      <Route path="/water-prediction/:id">
+        {() => <ProtectedRoute component={WaterPredictionDetails} />}
+      </Route>
+      
+      <Route path="/irrigation-tips/:id">
+        {() => <ProtectedRoute component={IrrigationTipsDetails} />}
       </Route>
       
       <Route component={NotFound} />
