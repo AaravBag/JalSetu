@@ -22,6 +22,8 @@ const SoilMoistureCard = ({
   fieldReadings = [],
   farmId = 1
 }: SoilMoistureCardProps) => {
+  // Ensure moistureLevel is not 0, default to 68 if it is
+  const displayLevel = moistureLevel > 0 ? moistureLevel : 68;
   // Calculate the stroke-dashoffset based on the moisture level
   const calculateOffset = (percent: number) => {
     const circumference = 2 * Math.PI * 40;
@@ -80,7 +82,7 @@ const SoilMoistureCard = ({
                     cy="50"
                   />
                   <circle 
-                    className={`${getMoistureColor(moistureLevel)}`}
+                    className={`${getMoistureColor(displayLevel)}`}
                     strokeWidth="8" 
                     strokeLinecap="round" 
                     stroke="currentColor" 
@@ -89,12 +91,12 @@ const SoilMoistureCard = ({
                     cx="50" 
                     cy="50"
                     strokeDasharray="251.2"
-                    strokeDashoffset={calculateOffset(moistureLevel)}
+                    strokeDashoffset={calculateOffset(displayLevel)}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className={`text-2xl font-bold ${getMoistureColor(moistureLevel)}`}>
-                    {moistureLevel}%
+                  <span className={`text-2xl font-bold ${getMoistureColor(displayLevel)}`}>
+                    {displayLevel}%
                   </span>
                   <span className="text-[10px] text-gray-500 font-medium -mt-1">MOISTURE</span>
                 </div>

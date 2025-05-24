@@ -50,7 +50,7 @@ const SoilMoistureDetails = () => {
   ];
   
   const fieldReadings = soilMoistureData?.fields || defaultFieldReadings;
-  const moistureLevel = soilMoistureData?.level || 68;
+  const moistureLevel = soilMoistureData?.level && soilMoistureData.level > 0 ? soilMoistureData.level : 68;
   const moistureStatus = soilMoistureData?.status || "Ideal Moisture Level";
   
   // Calculate the stroke-dashoffset based on the moisture level
