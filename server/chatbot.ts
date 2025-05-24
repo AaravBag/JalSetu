@@ -79,6 +79,23 @@ export async function handleChatRequest(req: Request, res: Response) {
       return res.json({ response: text });
     } catch (error: any) {
       log(`Error in Gemini API call: ${error.message}`, 'chatbot');
+      
+      // Check if this is a rate limit error
+      const isRateLimitError = error.message && (
+        error.message.includes('429') || 
+        error.message.includes('quota') || 
+        error.message.includes('rate limit') || 
+        error.message.includes('Too Many Requests')
+      );
+      
+      if (isRateLimitError) {
+        // Provide a helpful response about rate limits
+        return res.json({ 
+          response: "I'm currently experiencing high demand and have reached my usage limits. As I'm using a free API tier, I can only handle a certain number of questions per minute. Please try again in a minute or two, or ask a different question about water management for your farm.",
+          rateLimited: true
+        });
+      }
+      
       return res.status(500).json({ 
         error: 'Failed to get response from Gemini API',
         message: error.message 

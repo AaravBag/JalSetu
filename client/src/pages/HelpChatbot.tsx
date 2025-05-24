@@ -101,6 +101,14 @@ export default function HelpChatbot() {
         timestamp: new Date(),
       };
       
+      // If we hit a rate limit, let the user know they can try again later
+      if (data.rateLimited) {
+        toast({
+          title: "Usage Limit Reached",
+          description: "The AI service is experiencing high demand. Please try again in a minute.",
+        });
+      }
+      
       setMessages(prev => [...prev, botMessage]);
     } catch (error: any) {
       console.error('Chatbot error:', error);
