@@ -16,6 +16,18 @@ const Header = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { user, logout, logoutIsPending } = useAuth();
+  
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        toast({
+          title: "Logged out",
+          description: "You have been logged out successfully"
+        });
+      }
+    });
+  };
   
   return (
     <header className="px-6 pt-12 pb-4 relative z-10">
@@ -28,7 +40,7 @@ const Header = () => {
           </h1>
           <p className="text-sm font-medium text-neutral-dark dark:text-gray-300 opacity-75">Smart Water Management</p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           <button
             onClick={() => {
               toggleDarkMode();
@@ -46,22 +58,28 @@ const Header = () => {
             )}
           </button>
           
-          <div className="h-11 w-11 rounded-full shadow-md bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-700 ring-2 ring-white dark:ring-gray-700 flex items-center justify-center">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-6 w-6 text-primary dark:text-blue-400" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" 
-              />
-            </svg>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="h-11 w-11 rounded-full shadow-md bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-700 ring-2 ring-white dark:ring-gray-700 flex items-center justify-center cursor-pointer">
+                <User className="h-6 w-6 text-primary dark:text-blue-400" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                {user?.username || 'My Account'}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => window.location.href = '/settings'}>
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} disabled={logoutIsPending}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>{logoutIsPending ? 'Logging out...' : 'Log out'}</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
