@@ -7,6 +7,7 @@ import { insertUserSchema, insertFarmSchema, insertFieldSchema, insertWaterQuali
 import passport from "passport";
 import { setupAuth, isAuthenticated, hashPassword } from "./auth";
 import { handleChatRequest } from "./chatbot";
+import { handlePerplexityChat } from "./perplexity";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -371,9 +372,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }));
 
-  // Chatbot API endpoint
+  // Chatbot API endpoint - now using Perplexity AI
   app.post("/api/chat", asyncHandler(async (req, res) => {
-    await handleChatRequest(req, res);
+    // Use Perplexity API instead of Gemini
+    await handlePerplexityChat(req, res);
   }));
 
   const httpServer = createServer(app);
