@@ -15,6 +15,7 @@ import WaterQualityDetails from "@/pages/WaterQualityDetails";
 import SoilMoistureDetails from "@/pages/SoilMoistureDetails";
 import WaterPredictionDetails from "@/pages/WaterPredictionDetails";
 import IrrigationTipsDetails from "@/pages/IrrigationTipsDetails";
+import ReportDetails from "@/pages/ReportDetails";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useAuth } from "./hooks/useAuth";
@@ -80,6 +81,10 @@ function Router() {
       
       <Route path="/irrigation-tips/:id">
         {() => <ProtectedRoute component={IrrigationTipsDetails} />}
+      </Route>
+      
+      <Route path="/report-details/:type">
+        {() => <ProtectedRoute component={ReportDetails} />}
       </Route>
       
       <Route component={NotFound} />

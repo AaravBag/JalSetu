@@ -6,6 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "wouter";
 
 const Reports = () => {
   const { darkMode } = useTheme();
@@ -284,14 +285,15 @@ const Reports = () => {
                 </div>
                 
                 <div className="mt-4 flex justify-end">
-                  <Button 
-                    variant="outline" 
-                    className="rounded-full text-xs font-semibold text-primary bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                    onClick={() => handleViewDetails("Water Usage")}
-                  >
-                    View Details
-                    <ArrowRight className="h-3 w-3 ml-1.5" />
-                  </Button>
+                  <Link href={`/report-details/${encodeURIComponent("Water Usage")}`}>
+                    <Button 
+                      variant="outline" 
+                      className="rounded-full text-xs font-semibold text-primary bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      View Details
+                      <ArrowRight className="h-3 w-3 ml-1.5" />
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -335,14 +337,15 @@ const Reports = () => {
                 </div>
                 
                 <div className="mt-4 flex justify-end">
-                  <Button 
-                    variant="outline" 
-                    className="rounded-full text-xs font-semibold text-primary bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                    onClick={() => handleViewDetails("Soil Health")}
-                  >
-                    View Details
-                    <ArrowRight className="h-3 w-3 ml-1.5" />
-                  </Button>
+                  <Link href={`/report-details/${encodeURIComponent("Soil Health")}`}>
+                    <Button 
+                      variant="outline" 
+                      className="rounded-full text-xs font-semibold text-primary bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      View Details
+                      <ArrowRight className="h-3 w-3 ml-1.5" />
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -386,14 +389,15 @@ const Reports = () => {
                 </div>
                 
                 <div className="mt-4 flex justify-end">
-                  <Button 
-                    variant="outline" 
-                    className="rounded-full text-xs font-semibold text-primary bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                    onClick={() => handleViewDetails("Seasonal Analytics")}
-                  >
-                    View Details
-                    <ArrowRight className="h-3 w-3 ml-1.5" />
-                  </Button>
+                  <Link href={`/report-details/${encodeURIComponent("Seasonal Analytics")}`}>
+                    <Button 
+                      variant="outline" 
+                      className="rounded-full text-xs font-semibold text-primary bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      View Details
+                      <ArrowRight className="h-3 w-3 ml-1.5" />
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
