@@ -1,5 +1,6 @@
 import { TestTube, Droplet, Scale, Thermometer, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "wouter";
 
 interface QualityMetric {
   name: string;
@@ -11,9 +12,10 @@ interface QualityMetric {
 
 interface WaterQualityCardProps {
   qualityMetrics: QualityMetric[];
+  farmId?: number;
 }
 
-const WaterQualityCard = ({ qualityMetrics = [] }: WaterQualityCardProps) => {
+const WaterQualityCard = ({ qualityMetrics = [], farmId = 1 }: WaterQualityCardProps) => {
   const getIcon = (icon: string) => {
     switch (icon) {
       case "ph":
@@ -81,10 +83,10 @@ const WaterQualityCard = ({ qualityMetrics = [] }: WaterQualityCardProps) => {
           </div>
           
           <div className="mt-4 text-right">
-            <a href="#" className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium transition-colors hover:bg-secondary/20">
+            <Link href={`/water-quality/${farmId}`} className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium transition-colors hover:bg-secondary/20">
               View Details
               <ArrowRight className="h-3.5 w-3.5 ml-1" />
-            </a>
+            </Link>
           </div>
         </CardContent>
       </Card>

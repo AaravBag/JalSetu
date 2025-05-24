@@ -1,5 +1,6 @@
-import { Shrub, DropletIcon } from "lucide-react";
+import { Shrub, DropletIcon, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "wouter";
 
 interface FieldReading {
   id: number;
@@ -12,12 +13,14 @@ interface SoilMoistureCardProps {
   moistureLevel: number;
   moistureStatus: string;
   fieldReadings: FieldReading[];
+  farmId?: number;
 }
 
 const SoilMoistureCard = ({ 
   moistureLevel = 68, 
   moistureStatus = "Ideal Moisture Level", 
-  fieldReadings = [] 
+  fieldReadings = [],
+  farmId = 1
 }: SoilMoistureCardProps) => {
   // Calculate the stroke-dashoffset based on the moisture level
   const calculateOffset = (percent: number) => {
