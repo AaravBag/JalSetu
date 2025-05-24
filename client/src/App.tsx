@@ -9,6 +9,7 @@ import Alerts from "@/pages/Alerts";
 import Settings from "@/pages/Settings";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import EditProfile from "@/pages/EditProfile";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useAuth } from "./hooks/useAuth";
@@ -50,6 +51,10 @@ function Router() {
       </Route>
       <Route path="/settings">
         {() => <ProtectedRoute component={Settings} />}
+      </Route>
+
+      <Route path="/edit-profile">
+        {() => <ProtectedRoute component={EditProfile} />}
       </Route>
       
       <Route component={NotFound} />

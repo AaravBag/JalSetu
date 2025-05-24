@@ -35,7 +35,8 @@ const Settings = () => {
           id: "profile",
           label: "Profile Information",
           icon: <User className="h-5 w-5 text-blue-500" />,
-          action: <ChevronRight className="h-5 w-5 text-gray-400" />
+          action: <ChevronRight className="h-5 w-5 text-gray-400" />,
+          onClick: () => navigate('/edit-profile')
         },
         {
           id: "language",
@@ -164,28 +165,12 @@ const Settings = () => {
                 </div>
               </div>
               
-              <div className="flex space-x-2 mt-4">
+              <div className="mt-4">
                 <div 
-                  className="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex-1 flex items-center cursor-pointer hover:bg-white/30 transition-colors"
-                  onClick={() => {
-                    toast({
-                      title: "Edit Profile",
-                      description: "Profile editing functionality is coming soon."
-                    });
-                  }}
+                  className="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex items-center cursor-pointer hover:bg-white/30 transition-colors"
+                  onClick={() => navigate('/edit-profile')}
                 >
                   <span className="text-sm text-white font-medium text-center w-full">Edit Profile</span>
-                </div>
-                <div 
-                  className="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex-1 flex items-center cursor-pointer hover:bg-white/30 transition-colors"
-                  onClick={() => {
-                    toast({
-                      title: "My Farms",
-                      description: "Farm management functionality is coming soon."
-                    });
-                  }}
-                >
-                  <span className="text-sm text-white font-medium text-center w-full">My Farms</span>
                 </div>
               </div>
             </CardContent>
