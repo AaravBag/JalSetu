@@ -89,8 +89,20 @@ export default function HelpChatbot() {
       
       // Parse the response and handle errors
       const data = response as any;
-      if (data.error || !data.response) {
-        throw new Error(data.error || 'Empty response from server');
+      // Handle various response formats and ensure we have a response
+      if (typeof data !== 'object' || data === null) {
+        throw new Error('Invalid response format from server');
+      }
+      
+      if (data.error && !data.response) {
+        throw new Error(data.error || 'Error from server');
+      }
+      
+      // Ensure we have a response text
+      if (!data.response) {
+        // Create a fallback response if none is provided
+        data.response = "I'm having trouble connecting to my knowledge base right now. Please try asking about irrigation, soil moisture, or water quality topics.";
+        data.apiKeyError = true;
       }
       
       // Add bot response to chat
