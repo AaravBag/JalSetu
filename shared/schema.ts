@@ -10,6 +10,9 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  email: text("email"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -130,6 +133,9 @@ export const irrigationTipsRelations = relations(irrigationTips, ({ one }) => ({
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  firstName: true,
+  lastName: true,
+  email: true,
 });
 
 export const insertFarmSchema = createInsertSchema(farms).pick({

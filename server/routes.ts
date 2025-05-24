@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { db } from "./db";
 import { z } from "zod";
 import { insertUserSchema, insertFarmSchema, insertFieldSchema, insertWaterQualitySchema, insertSoilMoistureSchema, insertWeatherPredictionSchema, insertIrrigationTipSchema } from "@shared/schema";
+import passport from "passport";
+import { setupAuth, isAuthenticated, hashPassword } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Middleware to handle errors
