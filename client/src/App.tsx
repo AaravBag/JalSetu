@@ -10,6 +10,7 @@ import Settings from "@/pages/Settings";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import EditProfile from "@/pages/EditProfile";
+import HelpChatbot from "@/pages/HelpChatbot";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useAuth } from "./hooks/useAuth";
@@ -55,6 +56,10 @@ function Router() {
 
       <Route path="/edit-profile">
         {() => <ProtectedRoute component={EditProfile} />}
+      </Route>
+      
+      <Route path="/help-chatbot">
+        {() => <ProtectedRoute component={HelpChatbot} />}
       </Route>
       
       <Route component={NotFound} />

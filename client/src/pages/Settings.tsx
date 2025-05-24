@@ -1,4 +1,4 @@
-import { Settings as SettingsIcon, User, Languages, Bell, HelpCircle, LogOut, ChevronRight, Moon, Sun, Sparkles } from "lucide-react";
+import { Settings as SettingsIcon, User, Languages, Bell, HelpCircle, LogOut, ChevronRight, Moon, Sun, Sparkles, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 
 const Settings = () => {
   const { darkMode, toggleDarkMode, animationsEnabled, toggleAnimations } = useTheme();
@@ -14,6 +16,8 @@ const Settings = () => {
   const { toast } = useToast();
   const { user, logout } = useAuth();
   const [, navigate] = useLocation();
+  const { language, setLanguage, t, availableLanguages } = useLanguage();
+  const [languageDialogOpen, setLanguageDialogOpen] = useState(false);
   
   const handleLogout = () => {
     logout(undefined, {
@@ -42,8 +46,9 @@ const Settings = () => {
           id: "language",
           label: "Language",
           icon: <Languages className="h-5 w-5 text-green-500" />,
-          subtext: "English",
-          action: <ChevronRight className="h-5 w-5 text-gray-400" />
+          subtext: availableLanguages.find(lang => lang.code === language)?.name || "English",
+          action: <ChevronRight className="h-5 w-5 text-gray-400" />,
+          onClick: () => setLanguageDialogOpen(true)
         }
       ]
     },
@@ -113,7 +118,8 @@ const Settings = () => {
           id: "help",
           label: "Help & FAQ",
           icon: <HelpCircle className="h-5 w-5 text-amber-500" />,
-          action: <ChevronRight className="h-5 w-5 text-gray-400" />
+          action: <ChevronRight className="h-5 w-5 text-gray-400" />,
+          onClick: () => navigate('/help-chatbot')
         },
         {
           id: "logout",
@@ -219,6 +225,51 @@ const Settings = () => {
       </main>
       
       <BottomNavigation />
+
+      {/* Language Selection Dialog */}
+      <Dialog open={languageDialogOpen} onOpenChange={setLanguageDialogOpen}>
+        <DialogContent className="sm:max-w-md rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-center">Select Language</DialogTitle>
+            <DialogDescription className="text-center">
+              Choose your preferred language for the application
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            {availableLanguages.map((lang) => (
+              <button
+                key={lang.code}
+                className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
+                  language === lang.code 
+                    ? 'bg-primary/10 border border-primary/30' 
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+                onClick={() => {
+                  setLanguage(lang.code);
+                  toast({
+                    title: "Language Updated",
+                    description: `App language changed to ${lang.name}`,
+                  });
+                  setLanguageDialogOpen(false);
+                }}
+              >
+                <span className="text-xl">{lang.flag}</span>
+                <span className="font-medium">{lang.name}</span>
+                {language === lang.code && (
+                  <span className="ml-auto h-2 w-2 rounded-full bg-primary"></span>
+                )}
+              </button>
+            ))}
+          </div>
+          <DialogFooter className="sm:justify-center">
+            <DialogClose asChild>
+              <button className="rounded-lg px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                Cancel
+              </button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
