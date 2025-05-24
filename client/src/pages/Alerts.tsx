@@ -144,21 +144,31 @@ const Alerts = () => {
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pb-20 transition-colors duration-300">
       {/* Decorative top background pattern */}
-      <div className="absolute top-0 left-0 right-0 h-56 overflow-hidden z-0 opacity-40">
-        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-primary opacity-10 animate-pulse"></div>
-        <div className="absolute top-20 -left-10 w-36 h-36 rounded-full bg-secondary opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-0 left-0 right-0 h-72 overflow-hidden z-0">
+        <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-red-500 opacity-10 animate-pulse"></div>
+        <div className="absolute top-20 -left-10 w-36 h-36 rounded-full bg-amber-500 opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-40 right-20 w-24 h-24 rounded-full bg-blue-500 opacity-10 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        
+        {/* Alert icon pattern in background */}
+        <div className="absolute top-0 left-0 right-0 h-40 opacity-5">
+          <div className="flex justify-between px-10 pt-20">
+            <Bell className="h-8 w-8" />
+            <ShieldAlert className="h-8 w-8" />
+            <XCircle className="h-8 w-8" />
+          </div>
+        </div>
       </div>
       
       <header className="px-6 pt-12 pb-4 relative z-10">
         <div className="flex items-center justify-between">
           <div className="fade-in">
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white gradient-text">
               Alerts
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Important notifications</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">Important notifications & warnings</p>
           </div>
-          <div className="h-10 w-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm">
-            <Bell className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+          <div className="h-12 w-12 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center shadow-md border border-gray-100 dark:border-gray-700 pulse-effect">
+            <Bell className="h-6 w-6 text-red-500 dark:text-red-400" />
           </div>
         </div>
       </header>
@@ -167,18 +177,20 @@ const Alerts = () => {
         <div className="space-y-4">
           {filteredAlerts.length > 0 ? (
             <>
-              <div className="flex justify-between items-center mb-3">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Showing {filteredAlerts.length} of {allAlerts.length - dismissedAlerts.length} alerts
-                </p>
+              <div className="flex justify-between items-center mb-4">
+                <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-100 dark:border-gray-700">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                    Showing {filteredAlerts.length} of {allAlerts.length - dismissedAlerts.length} alerts
+                  </p>
+                </div>
                 {filteredAlerts.length > 0 && (
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="text-xs rounded-full border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm"
                     onClick={handleClearAll}
                   >
-                    <Trash2 className="h-3 w-3 mr-1" />
+                    <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                     Clear All
                   </Button>
                 )}
@@ -190,32 +202,32 @@ const Alerts = () => {
                 return (
                   <Card 
                     key={alert.id} 
-                    className={`rounded-2xl shadow-sm overflow-hidden border ${styles.container} dark:bg-opacity-10 dark:border-opacity-20 scale-in`}
-                    style={{ animationDelay: `${filteredAlerts.indexOf(alert) * 0.05}s` }}
+                    className={`rounded-2xl shadow-md overflow-hidden border glass-effect ${styles.container} dark:bg-opacity-10 dark:border-opacity-20 scale-in enhanced-card`}
+                    style={{ animationDelay: `${filteredAlerts.indexOf(alert) * 0.08}s` }}
                   >
-                    <CardContent className="p-4">
+                    <CardContent className="p-5 relative">
                       <div className="flex">
-                        <div className={`w-10 h-10 rounded-full ${styles.icon} dark:bg-opacity-20 flex items-center justify-center mr-3 flex-shrink-0`}>
+                        <div className={`w-12 h-12 rounded-xl ${styles.icon} dark:bg-opacity-20 flex items-center justify-center mr-4 flex-shrink-0 shadow-sm pulse-effect`}>
                           {alert.icon}
                         </div>
                         
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
                             <div>
-                              <h3 className="font-bold text-gray-900 dark:text-gray-100">{alert.title}</h3>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{alert.message}</p>
+                              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base">{alert.title}</h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1.5 pr-6">{alert.message}</p>
                             </div>
                             <button 
-                              className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400"
+                              className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors"
                               onClick={() => dismissAlert(alert.id)}
                             >
                               <XCircle className="h-5 w-5" />
                             </button>
                           </div>
                           
-                          <div className="flex justify-between items-center mt-3">
-                            <span className="text-xs text-gray-500 dark:text-gray-400">{alert.time}</span>
-                            <Badge className={styles.badge}>{alert.type}</Badge>
+                          <div className="flex justify-between items-center mt-4">
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 px-2 py-0.5 rounded-full backdrop-blur-sm">{alert.time}</span>
+                            <Badge className={`${styles.badge} shadow-sm px-2.5 py-0.5`}>{alert.type}</Badge>
                           </div>
                         </div>
                       </div>
