@@ -63,47 +63,56 @@ const WaterPredictionCard = ({
 
   return (
     <div className="mb-5">
-      <h3 className="text-lg font-bold mb-3 flex items-center">
-        <div className="rounded-full bg-blue-100 p-1 mr-2">
-          <Cloud className="h-4 w-4 text-blue-500" />
+      <h3 className="text-lg font-bold mb-3 flex items-center gradient-text">
+        <div className="rounded-full bg-blue-100 p-1.5 mr-2 shadow-sm">
+          <Cloud className="h-4 w-4 text-blue-600" />
         </div>
         Water Prediction
       </h3>
       
-      <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0">
-        <CardContent className="p-5">
-          <div className="flex items-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center p-2 mr-5 shadow-sm border border-blue-100">
-              <CloudRain className="h-9 w-9 text-blue-500" />
+      <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0 card-highlight enhanced-card">
+        <CardContent className="p-5 relative">
+          {/* Decorative elements */}
+          <div className="absolute top-3 right-3 opacity-20 floating" style={{ animationDelay: '1.5s' }}>
+            <CloudRain className="h-14 w-14 text-blue-400" />
+          </div>
+          <div className="absolute -bottom-6 -left-4 opacity-10 floating" style={{ animationDelay: '0.8s' }}>
+            <CloudSun className="h-16 w-16 text-amber-400" />
+          </div>
+          
+          <div className="flex items-center relative z-10">
+            <div className="w-18 h-18 rounded-2xl gradient-blue flex items-center justify-center p-3 mr-5 shadow-md border border-blue-200 dark:border-blue-700 pulse-effect">
+              <CloudRain className="h-10 w-10 text-white" />
             </div>
             <div>
-              <h4 className="font-bold text-gray-800">{prediction}</h4>
-              <div className="flex items-center mt-1">
-                <Umbrella className="h-3.5 w-3.5 text-blue-500 mr-1.5" />
-                <p className="text-sm text-gray-600">{advice}</p>
+              <h4 className="font-bold text-gray-800 dark:text-gray-200 text-lg">{prediction}</h4>
+              <div className="flex items-center mt-2">
+                <Umbrella className="h-4 w-4 text-blue-500 mr-2" />
+                <p className="text-sm text-gray-600 dark:text-gray-400">{advice}</p>
               </div>
             </div>
           </div>
           
-          <div className="mt-4 grid grid-cols-3 gap-3">
+          <div className="mt-5 grid grid-cols-3 gap-3">
             {forecastData.map((day, index) => (
               <div 
                 key={index} 
-                className={`bg-gradient-to-b ${getWeatherBackground(day.weather)} rounded-2xl p-3 text-center shadow-sm border`}
+                className={`bg-gradient-to-b ${getWeatherBackground(day.weather)} rounded-2xl p-3 text-center shadow-sm border hover:shadow-md transition-all dark:border-gray-700`}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <p className="text-xs font-medium text-gray-500 mb-1">{day.day}</p>
-                <div className="flex justify-center my-1">
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{day.day}</p>
+                <div className="flex justify-center my-1.5 floating" style={{ animationDelay: `${index * 0.2}s` }}>
                   {getWeatherIcon(day.weather)}
                 </div>
-                <p className="text-sm font-bold">{day.temperature}</p>
+                <p className="text-sm font-bold text-gray-800 dark:text-white">{day.temperature}</p>
               </div>
             ))}
           </div>
           
-          <div className="mt-4 text-right">
-            <Link href={`/water-prediction/${farmId}`} className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-blue-50 text-blue-500 text-sm font-medium transition-colors hover:bg-blue-100">
+          <div className="mt-5 text-right">
+            <Link href={`/water-prediction/${farmId}`} className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-medium transition-colors hover:bg-blue-600 shadow-sm">
               View Details
-              <ArrowRight className="h-3.5 w-3.5 ml-1" />
+              <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
             </Link>
           </div>
         </CardContent>
