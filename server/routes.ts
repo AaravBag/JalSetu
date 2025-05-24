@@ -6,6 +6,7 @@ import { z } from "zod";
 import { insertUserSchema, insertFarmSchema, insertFieldSchema, insertWaterQualitySchema, insertSoilMoistureSchema, insertWeatherPredictionSchema, insertIrrigationTipSchema } from "@shared/schema";
 import passport from "passport";
 import { setupAuth, isAuthenticated, hashPassword } from "./auth";
+import { handleChatRequest } from "./chatbot";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -368,6 +369,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         irrigationTip
       }
     });
+  }));
+
+  // Chatbot API endpoint
+  app.post("/api/chat", asyncHandler(async (req, res) => {
+    await handleChatRequest(req, res);
   }));
 
   const httpServer = createServer(app);
