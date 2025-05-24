@@ -40,6 +40,9 @@ export function useAuth() {
     mutationFn: async (credentials: LoginCredentials) => {
       return apiRequest('/api/login', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(credentials),
       });
     },
@@ -64,6 +67,9 @@ export function useAuth() {
     mutationFn: async (data: RegisterData) => {
       return apiRequest('/api/register', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(data),
       });
     },
