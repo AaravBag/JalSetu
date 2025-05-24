@@ -1,30 +1,32 @@
 import { Home, BarChart2, Bell, Settings } from "lucide-react";
 import { useLocation, Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 const BottomNavigation = () => {
   const [location] = useLocation();
+  const { t } = useLanguage();
   
   const navItems = [
     {
-      name: "Home",
+      name: t.home,
       icon: Home,
       path: "/",
       active: location === "/"
     },
     {
-      name: "Reports",
+      name: t.reports,
       icon: BarChart2,
       path: "/reports",
       active: location === "/reports"
     },
     {
-      name: "Alerts",
+      name: t.alerts,
       icon: Bell,
       path: "/alerts",
       active: location === "/alerts"
     },
     {
-      name: "Settings",
+      name: t.settings,
       icon: Settings,
       path: "/settings",
       active: location === "/settings"

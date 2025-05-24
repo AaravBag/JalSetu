@@ -8,6 +8,7 @@ import Reports from "@/pages/Reports";
 import Alerts from "@/pages/Alerts";
 import Settings from "@/pages/Settings";
 import { ThemeProvider } from "./context/ThemeContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function Router() {
   return (
@@ -24,10 +25,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <Router />
-        <Toaster />
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <Router />
+          <Toaster />
+        </ThemeProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

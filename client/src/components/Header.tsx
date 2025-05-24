@@ -1,5 +1,6 @@
 import { Droplet, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 
 const Header = () => {
