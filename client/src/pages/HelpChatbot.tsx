@@ -291,7 +291,7 @@ export default function HelpChatbot() {
           </Button>
         </form>
         <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">
-          JalSetu Farming Assistant
+          JalSetu Farming Assistant with Eden AI
         </p>
       </div>
     </div>

@@ -9,6 +9,7 @@ import { setupAuth, isAuthenticated, hashPassword } from "./auth";
 import { handleChatRequest } from "./chatbot";
 import { handlePerplexityChat } from "./perplexity";
 import { handleLocalChat } from "./localChatbot";
+import { handleEdenAIChat } from "./edenAI";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
@@ -373,10 +374,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }));
 
-  // Chatbot API endpoint - using local implementation
+  // Chatbot API endpoint - using Eden AI with local fallback
   app.post("/api/chat", asyncHandler(async (req, res) => {
-    // Use local chatbot with built-in knowledge base
-    await handleLocalChat(req, res);
+    // Use Eden AI with built-in knowledge base as fallback
+    await handleEdenAIChat(req, res);
   }));
 
   const httpServer = createServer(app);
