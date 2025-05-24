@@ -124,6 +124,13 @@ const SoilMoistureCard = ({
                   </span>
                 ))}
               </div>
+              
+              <div className="mt-3 text-right">
+                <Link href={`/soil-moisture/${farmId}`} className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium transition-colors hover:bg-primary/20">
+                  View Details
+                  <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                </Link>
+              </div>
             </div>
           </div>
         </CardContent>

@@ -1,13 +1,16 @@
 import { Lightbulb, Check, Sparkles, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 interface SmartIrrigationTipCardProps {
   tip: string;
+  farmId?: number;
 }
 
 const SmartIrrigationTipCard = ({ 
-  tip = "Based on your soil type and current moisture levels, water your crops early morning (5-7 AM) to minimize evaporation and maximize absorption." 
+  tip = "Based on your soil type and current moisture levels, water your crops early morning (5-7 AM) to minimize evaporation and maximize absorption.",
+  farmId = 1
 }: SmartIrrigationTipCardProps) => {
   return (
     <div className="mb-6">
@@ -48,13 +51,15 @@ const SmartIrrigationTipCard = ({
                   Apply suggestion
                 </Button>
                 
-                <Button 
-                  variant="outline" 
-                  className="rounded-full text-xs font-semibold text-gray-700 bg-white border border-gray-200 shadow-sm hover:bg-gray-50"
-                >
-                  See more tips
-                  <ArrowRight className="h-3 w-3 ml-1.5" />
-                </Button>
+                <Link href={`/irrigation-tips/${farmId}`}>
+                  <Button 
+                    variant="outline" 
+                    className="rounded-full text-xs font-semibold text-gray-700 bg-white border border-gray-200 shadow-sm hover:bg-gray-50"
+                  >
+                    View Details
+                    <ArrowRight className="h-3 w-3 ml-1.5" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

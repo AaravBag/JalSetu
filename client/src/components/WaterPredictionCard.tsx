@@ -1,5 +1,6 @@
-import { Cloud, Sun, CloudRain, CloudSun, Umbrella } from "lucide-react";
+import { Cloud, Sun, CloudRain, CloudSun, Umbrella, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "wouter";
 
 interface ForecastDay {
   day: string;
@@ -11,12 +12,14 @@ interface WaterPredictionCardProps {
   prediction: string;
   advice: string;
   forecast: ForecastDay[];
+  farmId?: number;
 }
 
 const WaterPredictionCard = ({ 
   prediction = "Rain expected in 2 days", 
   advice = "Delay irrigation to save water and energy.", 
-  forecast = [] 
+  forecast = [],
+  farmId = 1
 }: WaterPredictionCardProps) => {
   
   const getWeatherIcon = (weather: string) => {
@@ -95,6 +98,13 @@ const WaterPredictionCard = ({
                 <p className="text-sm font-bold">{day.temperature}</p>
               </div>
             ))}
+          </div>
+          
+          <div className="mt-4 text-right">
+            <Link href={`/water-prediction/${farmId}`} className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-blue-50 text-blue-500 text-sm font-medium transition-colors hover:bg-blue-100">
+              View Details
+              <ArrowRight className="h-3.5 w-3.5 ml-1" />
+            </Link>
           </div>
         </CardContent>
       </Card>

@@ -89,7 +89,8 @@ const Home = () => {
             
             <div className="scale-in" style={{ animationDelay: '0.1s' }}>
               <WaterQualityCard 
-                qualityMetrics={farmData?.waterQuality || []} 
+                qualityMetrics={farmData?.waterQuality || []}
+                farmId={farmData?.farm?.id}
               />
             </div>
             
@@ -98,6 +99,7 @@ const Home = () => {
                 moistureLevel={farmData?.soilMoisture?.level || 0}
                 moistureStatus={farmData?.soilMoisture?.status || ""}
                 fieldReadings={farmData?.soilMoisture?.fields || []}
+                farmId={farmData?.farm?.id}
               />
             </div>
             
@@ -106,12 +108,14 @@ const Home = () => {
                 prediction={farmData?.waterPrediction?.message || ""}
                 advice={farmData?.waterPrediction?.advice || ""}
                 forecast={farmData?.waterPrediction?.forecast || []}
+                farmId={farmData?.farm?.id}
               />
             </div>
             
             <div className="slide-in-bottom" style={{ animationDelay: '0.4s' }}>
               <SmartIrrigationTipCard 
                 tip={farmData?.irrigationTip || ""}
+                farmId={farmData?.farm?.id}
               />
             </div>
           </div>
