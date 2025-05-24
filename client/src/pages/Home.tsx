@@ -7,6 +7,7 @@ import SmartIrrigationTipCard from "@/components/SmartIrrigationTipCard";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@/context/ThemeContext";
+import { useAuth } from "@/hooks/useAuth";
 
 // Define the type for farm data
 interface FarmData {
@@ -51,8 +52,11 @@ interface FarmData {
 const Home = () => {
   const { darkMode } = useTheme();
   const { data: farmData, isLoading } = useQuery<FarmData>({
-    queryKey: ["/api/farm-data"],
+    queryKey: ["/api/user-dashboard"],
   });
+  
+  // Get user info for personalized experience
+  const { user } = useAuth();
 
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pb-20 transition-colors duration-300">
@@ -78,8 +82,8 @@ const Home = () => {
           <div className="space-y-6">
             <div className="fade-in">
               <WelcomeCard 
-                farmerName={farmData?.farmer.name || "Farmer"} 
-                farmStatus={farmData?.farm.status || "Loading farm status..."} 
+                farmerName={user?.firstName || farmData?.farmer.name || "Farmer"} 
+                farmStatus={farmData?.farm?.status || "Loading farm status..."} 
               />
             </div>
             
