@@ -7,6 +7,7 @@ interface ForecastDay {
   day: string;
   temperature: string;
   weather: "sunny" | "cloudy" | "rainy" | "partly-cloudy";
+  rainChance?: number;
 }
 
 interface WaterPredictionCardProps {
@@ -56,9 +57,9 @@ const WaterPredictionCard = ({
 
   // Default forecast if none provided
   const defaultForecast: ForecastDay[] = [
-    { day: "Today", temperature: "32°C", weather: "sunny" },
-    { day: "Tomorrow", temperature: "30°C", weather: "partly-cloudy" },
-    { day: "Thu", temperature: "27°C", weather: "rainy" }
+    { day: "Today", temperature: "32°C", weather: "sunny", rainChance: 5 },
+    { day: "Tomorrow", temperature: "30°C", weather: "partly-cloudy", rainChance: 25 },
+    { day: "Thu", temperature: "27°C", weather: "rainy", rainChance: 85 }
   ];
 
   const forecastData = forecast.length ? forecast : defaultForecast;
@@ -107,6 +108,12 @@ const WaterPredictionCard = ({
                   {getWeatherIcon(day.weather)}
                 </div>
                 <p className="text-sm font-bold text-gray-800 dark:text-white">{day.temperature}</p>
+                {day.rainChance !== undefined && (
+                  <div className="mt-1 flex items-center justify-center">
+                    <CloudRain className="h-3 w-3 text-blue-500 mr-1" />
+                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">{day.rainChance}%</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>

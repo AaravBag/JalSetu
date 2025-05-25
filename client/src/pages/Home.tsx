@@ -44,6 +44,7 @@ interface FarmData {
       day: string;
       temperature: string;
       weather: "sunny" | "cloudy" | "rainy" | "partly-cloudy";
+      rainChance?: number;
     }>;
   };
   irrigationTip: string;
