@@ -180,7 +180,7 @@ const Reports = () => {
                     variant="outline" 
                     className="rounded-full text-sm font-medium transition-all bg-blue-500 text-white hover:bg-blue-600 border-0 shadow-sm"
                   >
-                    View Details
+                    {t.viewDetails}
                     <ArrowRight className="h-4 w-4 ml-1.5" />
                   </Button>
                 </Link>
@@ -280,7 +280,7 @@ const Reports = () => {
                     variant="outline" 
                     className="rounded-full text-sm font-medium transition-all bg-green-500 text-white hover:bg-green-600 border-0 shadow-sm"
                   >
-                    View Details
+                    {t.viewDetails}
                     <ArrowRight className="h-4 w-4 ml-1.5" />
                   </Button>
                 </Link>
@@ -380,7 +380,7 @@ const Reports = () => {
                     variant="outline" 
                     className="rounded-full text-sm font-medium transition-all bg-amber-500 text-white hover:bg-amber-600 border-0 shadow-sm"
                   >
-                    View Details
+                    {t.viewDetails}
                     <ArrowRight className="h-4 w-4 ml-1.5" />
                   </Button>
                 </Link>
