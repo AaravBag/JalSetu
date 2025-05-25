@@ -39,6 +39,12 @@ export default function HelpChatbot() {
     { id: '4', question: 'What is the optimal soil moisture level for rice?' },
     { id: '5', question: 'How can I conserve water during drought?' },
     { id: '6', question: 'What are the best watering practices for vegetables?' },
+    { id: '7', question: 'How often should I water wheat crops?' },
+    { id: '8', question: 'What causes yellow leaves in plants?' },
+    { id: '9', question: 'How to prevent crop diseases?' },
+    { id: '10', question: 'When is the best time to apply fertilizer?' },
+    { id: '11', question: 'How to improve soil quality?' },
+    { id: '12', question: 'What are signs of overwatering?' },
   ];
 
   useEffect(() => {
@@ -73,6 +79,31 @@ export default function HelpChatbot() {
       return "Rice water management: Maintain 2-5 cm standing water during tillering and flowering stages. Soil moisture should be 80-90%. Drain fields 1-2 weeks before harvest. For direct seeded rice, maintain 90-100% soil moisture for first 3 weeks, then manage like transplanted rice.";
     }
     
+    // Wheat specific
+    if (lowerQuestion.includes('wheat') && (lowerQuestion.includes('water') || lowerQuestion.includes('often'))) {
+      return "Wheat irrigation: Water at sowing, crown root initiation (21 days), tillering (40-45 days), jointing (60-65 days), flowering (85-90 days), and grain filling (100-105 days). Each irrigation should be 4-5 cm deep. Avoid waterlogging. Stop irrigation 2-3 weeks before harvest.";
+    }
+    
+    // Yellow leaves problem
+    if (lowerQuestion.includes('yellow') && lowerQuestion.includes('leaves')) {
+      return "Yellow leaves causes: 1) Overwatering or poor drainage, 2) Nitrogen deficiency (apply nitrogen fertilizer), 3) Iron deficiency in alkaline soils, 4) Natural aging of lower leaves, 5) Disease or pest damage, 6) Extreme temperatures. Check soil moisture and nutrient levels first.";
+    }
+    
+    // Overwatering signs
+    if (lowerQuestion.includes('overwatering') || lowerQuestion.includes('signs')) {
+      return "Signs of overwatering: 1) Yellow, wilting leaves despite wet soil, 2) Musty smell from soil, 3) Fungal growth on soil surface, 4) Root rot (black, mushy roots), 5) Stunted growth, 6) Soil that stays wet for days. Reduce watering frequency and improve drainage.";
+    }
+    
+    // Soil quality improvement
+    if (lowerQuestion.includes('soil quality') || lowerQuestion.includes('improve soil')) {
+      return "Improve soil quality: 1) Add organic compost regularly, 2) Practice crop rotation, 3) Use cover crops, 4) Avoid over-tilling, 5) Add vermicompost for nutrients, 6) Test soil pH and adjust if needed, 7) Mulch to retain moisture, 8) Reduce chemical inputs gradually.";
+    }
+    
+    // Fertilizer timing
+    if (lowerQuestion.includes('fertilizer') && (lowerQuestion.includes('time') || lowerQuestion.includes('when') || lowerQuestion.includes('apply'))) {
+      return "Fertilizer timing: Apply base fertilizer before sowing. First top-dressing at 20-25 days after sowing. Second at flowering stage. Best time is early morning or evening. Apply when soil is moist but not waterlogged. Water lightly after application to activate nutrients.";
+    }
+    
     // Drought and water conservation
     if (lowerQuestion.includes('drought') || lowerQuestion.includes('conserve') || lowerQuestion.includes('save water')) {
       return "Water conservation during drought: 1) Use drip irrigation or micro-sprinklers, 2) Apply mulch to reduce evaporation, 3) Water deeply but less frequently, 4) Choose drought-resistant crop varieties, 5) Harvest rainwater when possible, 6) Monitor soil moisture closely with sensors to avoid overwatering.";
@@ -88,14 +119,39 @@ export default function HelpChatbot() {
       return "Nutrient management: Apply nitrogen fertilizer in split doses - 1/3 at planting, 1/3 at tillering, 1/3 at flowering. Phosphorus at planting only. Potassium throughout growing season. Always water after fertilizer application. Soil testing helps determine exact nutrient needs.";
     }
     
-    // Crop diseases
-    if (lowerQuestion.includes('disease') || lowerQuestion.includes('fungus') || lowerQuestion.includes('pest')) {
-      return "Disease prevention: Avoid overwatering which creates fungal conditions. Water at soil level, not on leaves. Ensure good drainage. Rotate crops annually. Remove infected plant debris. Use resistant varieties when available. Monitor regularly for early detection.";
+    // Crop diseases prevention
+    if (lowerQuestion.includes('disease') || lowerQuestion.includes('prevent') || lowerQuestion.includes('fungus') || lowerQuestion.includes('pest')) {
+      return "Disease prevention: Avoid overwatering which creates fungal conditions. Water at soil level, not on leaves. Ensure good drainage. Rotate crops annually. Remove infected plant debris. Use resistant varieties when available. Monitor regularly for early detection. Maintain proper plant spacing for air circulation.";
     }
     
     // Weather and seasons
     if (lowerQuestion.includes('weather') || lowerQuestion.includes('season') || lowerQuestion.includes('rain')) {
       return "Weather-based irrigation: Reduce watering before expected rain. Increase frequency during hot, dry periods. Protect crops from heavy rain with drainage. Monitor weather forecasts and adjust irrigation schedules accordingly. Use JalSetu's weather predictions for better planning.";
+    }
+    
+    // Seed germination
+    if (lowerQuestion.includes('seed') || lowerQuestion.includes('germination') || lowerQuestion.includes('sprouting')) {
+      return "Seed germination tips: Maintain consistent soil moisture (not waterlogged). Soil temperature should be 20-25°C for most crops. Plant at proper depth (2-3 times seed diameter). Ensure good soil contact. Keep soil surface moist until germination. Provide shade in hot weather.";
+    }
+    
+    // Crop rotation
+    if (lowerQuestion.includes('rotation') || lowerQuestion.includes('crop rotation')) {
+      return "Crop rotation benefits: 1) Breaks pest and disease cycles, 2) Improves soil fertility, 3) Reduces weed pressure, 4) Optimizes nutrient use. Rotate between cereals, legumes, and root crops. Legumes add nitrogen to soil. Avoid planting same family crops consecutively.";
+    }
+    
+    // Pesticide and organic farming
+    if (lowerQuestion.includes('organic') || lowerQuestion.includes('pesticide') || lowerQuestion.includes('natural')) {
+      return "Organic farming practices: Use neem oil for pest control. Apply compost for nutrients. Encourage beneficial insects with diverse plants. Use crop rotation and companion planting. Apply organic mulch. Use biological pest control methods. Avoid synthetic chemicals.";
+    }
+    
+    // Harvest timing
+    if (lowerQuestion.includes('harvest') || lowerQuestion.includes('when to harvest')) {
+      return "Harvest timing: Rice - when 80% grains turn golden. Wheat - when moisture is 20-25%. Vegetables - harvest in early morning for best quality. Check maturity indicators specific to each crop. Harvest before overripening to maintain quality and storage life.";
+    }
+    
+    // Plant nutrition deficiency
+    if (lowerQuestion.includes('deficiency') || lowerQuestion.includes('nutrition') || lowerQuestion.includes('lacking')) {
+      return "Nutrient deficiency signs: Nitrogen - yellowing from bottom leaves. Phosphorus - purple/dark leaves. Potassium - brown leaf edges. Iron - yellow leaves with green veins. Magnesium - yellow between leaf veins. Conduct soil test for accurate diagnosis and treatment.";
     }
     
     // Technology and sensors
@@ -114,7 +170,7 @@ export default function HelpChatbot() {
     }
     
     // Default response for unmatched questions
-    return "I can help you with questions about irrigation scheduling, soil moisture levels, water quality, crop-specific advice, drought management, vegetable farming, fertilizer application, disease prevention, weather planning, and JalSetu technology. Please ask me about any of these topics for detailed guidance.";
+    return "I can help you with questions about irrigation scheduling, soil moisture levels, water quality, crop-specific advice (rice, wheat, vegetables), drought management, fertilizer timing, disease prevention, harvest planning, organic farming, soil improvement, and JalSetu technology. Please ask me about any of these topics for detailed guidance.";
   };
 
   const handleSendMessage = async (e?: React.FormEvent) => {
