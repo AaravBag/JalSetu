@@ -109,9 +109,8 @@ const WaterPredictionCard = ({
                 </div>
                 <p className="text-sm font-bold text-gray-800 dark:text-white">{day.temperature}</p>
                 {day.rainChance !== undefined && (
-                  <div className="mt-1 flex items-center justify-center">
-                    <CloudRain className="h-3 w-3 text-blue-500 mr-1" />
-                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">{day.rainChance}%</p>
+                  <div className="mt-1">
+                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">{day.rainChance}% Rain</p>
                   </div>
                 )}
               </div>
