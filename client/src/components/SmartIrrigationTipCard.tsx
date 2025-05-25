@@ -22,7 +22,7 @@ const SmartIrrigationTipCard = ({
         <div className="rounded-full bg-amber-100 p-1.5 mr-2 shadow-sm">
           <Lightbulb className="h-4 w-4 text-amber-600" />
         </div>
-        Smart Irrigation Tip
+        {t.irrigationTip}
       </h3>
       
       <Card className="gradient-amber rounded-3xl shadow-lg overflow-hidden border-0 card-highlight enhanced-card">
@@ -68,7 +68,7 @@ const SmartIrrigationTipCard = ({
                     variant="outline" 
                     className="rounded-full text-xs font-semibold text-white bg-amber-600/30 backdrop-blur-sm border border-white/20 shadow-sm hover:bg-amber-600/40"
                   >
-                    View Details
+                    {t.viewDetails}
                     <ArrowRight className="h-3 w-3 ml-1.5" />
                   </Button>
                 </Link>
