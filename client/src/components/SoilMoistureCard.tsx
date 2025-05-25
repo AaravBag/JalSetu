@@ -1,6 +1,7 @@
 import { Shrub, DropletIcon, ArrowRight, Sprout, Flower } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface FieldReading {
   id: number;
@@ -22,6 +23,7 @@ const SoilMoistureCard = ({
   fieldReadings = [],
   farmId = 1
 }: SoilMoistureCardProps) => {
+  const { t } = useLanguage();
   // Ensure moistureLevel is not 0, default to 68 if it is
   const displayLevel = moistureLevel > 0 ? moistureLevel : 68;
   
@@ -64,7 +66,7 @@ const SoilMoistureCard = ({
         <div className="rounded-full bg-green-100 p-1.5 mr-2 shadow-sm">
           <Shrub className="h-4 w-4 text-green-600" />
         </div>
-        Soil Moisture
+        {t.soilMoisture}
       </h3>
       
       <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0 card-highlight enhanced-card">
@@ -111,7 +113,7 @@ const SoilMoistureCard = ({
                   <span className={`text-3xl font-bold ${getMoistureColor(displayLevel)} text-shadow`}>
                     {displayLevel}%
                   </span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">MOISTURE</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-1">{t.soilMoisture.toUpperCase()}</span>
                 </div>
               </div>
               <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
@@ -127,7 +129,7 @@ const SoilMoistureCard = ({
             <div className="flex-1 ml-5">
               <h4 className="font-bold text-gray-800 dark:text-gray-200 text-lg">{moistureStatus}</h4>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Current soil moisture is optimal for your crops.
+                {"Current soil moisture is optimal for your crops."}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {readings.map((field, index) => (
@@ -143,7 +145,7 @@ const SoilMoistureCard = ({
               
               <div className="mt-4 text-right">
                 <Link href={`/soil-moisture/${farmId}`} className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-green-500 text-white text-sm font-medium transition-colors hover:bg-green-600 shadow-sm">
-                  View Details
+                  {t.viewDetails}
                   <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                 </Link>
               </div>
