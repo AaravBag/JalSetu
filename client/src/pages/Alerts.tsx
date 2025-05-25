@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useToast } from "@/hooks/use-toast";
 
-// Alert types
+// Define alert types
 type AlertType = "info" | "warning" | "danger";
 
 // Alert interface
-interface AlertItem {
+interface Alert {
   id: number;
   title: string;
   message: string;
@@ -19,7 +19,7 @@ interface AlertItem {
 }
 
 // Sample alert data
-const sampleAlerts: AlertItem[] = [
+const SAMPLE_ALERTS: Alert[] = [
   { 
     id: 1, 
     title: "Low Soil Moisture", 
@@ -86,14 +86,46 @@ const sampleAlerts: AlertItem[] = [
   }
 ];
 
-// Alert page component
-const Alerts = () => {
+// Component for alerts page
+export default function Alerts() {
   const { toast } = useToast();
-  const [alertsList, setAlertsList] = useState<AlertItem[]>(sampleAlerts);
+  
+  // State for alerts and visible count
+  const [alerts, setAlerts] = useState<Alert[]>(SAMPLE_ALERTS);
   const [visibleCount, setVisibleCount] = useState(4);
   
-  // Get styles based on alert type
-  const getAlertStyles = (type: AlertType) => {
+  // Calculate which alerts are currently visible
+  const visibleAlerts = alerts.slice(0, visibleCount);
+  
+  // Function to dismiss a single alert
+  function dismissAlert(id: number) {
+    setAlerts(alerts.filter(alert => alert.id !== id));
+    toast({
+      title: "Alert Dismissed",
+      description: "The alert has been removed from your list."
+    });
+  }
+  
+  // Function to clear all alerts
+  function clearAllAlerts() {
+    setAlerts([]);
+    toast({
+      title: "All Alerts Cleared",
+      description: "Your alerts have been cleared."
+    });
+  }
+  
+  // Function to load more alerts
+  function loadMoreAlerts() {
+    setVisibleCount(prev => Math.min(prev + 4, alerts.length));
+    toast({
+      title: "More Alerts Loaded",
+      description: "Showing additional alerts from your history."
+    });
+  }
+  
+  // Function to get styles based on alert type
+  function getAlertStyles(type: AlertType) {
     switch(type) {
       case "danger":
         return {
@@ -115,37 +147,7 @@ const Alerts = () => {
           badge: "bg-blue-500 text-white"
         };
     }
-  };
-  
-  // Handle dismissing a single alert
-  const handleDismiss = (id: number) => {
-    setAlertsList(alertsList.filter(alert => alert.id !== id));
-    toast({
-      title: "Alert Dismissed",
-      description: "The alert has been removed from your list."
-    });
-  };
-  
-  // Handle clearing all alerts
-  const handleClearAll = () => {
-    setAlertsList([]);
-    toast({
-      title: "All Alerts Cleared",
-      description: "Your alerts have been cleared."
-    });
-  };
-  
-  // Handle loading more alerts
-  const handleLoadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 4, alertsList.length));
-    toast({
-      title: "Alerts Loaded",
-      description: "Showing more alerts from your history."
-    });
-  };
-  
-  // Visible alerts based on current visible count
-  const visibleAlerts = alertsList.slice(0, visibleCount);
+  }
 
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pb-20 transition-colors duration-300">
@@ -172,19 +174,19 @@ const Alerts = () => {
       
       <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto z-10">
         <div className="space-y-4">
-          {alertsList.length > 0 ? (
+          {alerts.length > 0 ? (
             <>
               <div className="flex justify-between items-center mb-4">
                 <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-100 dark:border-gray-700">
                   <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                    Showing {visibleAlerts.length} of {alertsList.length} alerts
+                    Showing {visibleAlerts.length} of {alerts.length} alerts
                   </p>
                 </div>
                 
                 <button 
                   type="button"
                   className="flex items-center text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm px-3 py-1"
-                  onClick={handleClearAll}
+                  onClick={clearAllAlerts}
                 >
                   <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                   Clear All
@@ -214,7 +216,7 @@ const Alerts = () => {
                             <button 
                               type="button"
                               className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors"
-                              onClick={() => handleDismiss(alert.id)}
+                              onClick={() => dismissAlert(alert.id)}
                             >
                               <XCircle className="h-5 w-5" />
                             </button>
@@ -231,12 +233,12 @@ const Alerts = () => {
                 );
               })}
               
-              {visibleCount < alertsList.length && (
+              {visibleCount < alerts.length && (
                 <div className="flex justify-center mt-6 fade-in">
                   <button 
                     type="button"
                     className="rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2"
-                    onClick={handleLoadMore}
+                    onClick={loadMoreAlerts}
                   >
                     Load More
                   </button>
@@ -260,6 +262,4 @@ const Alerts = () => {
       <BottomNavigation />
     </div>
   );
-};
-
-export default Alerts;
+}
