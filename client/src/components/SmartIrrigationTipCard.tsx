@@ -57,7 +57,7 @@ const SmartIrrigationTipCard = ({
               <div className="flex flex-wrap gap-2">
                 <Button 
                   variant="outline" 
-                  className="rounded-full text-xs font-semibold bg-white text-amber-700 border-0 shadow-md hover:shadow-lg hover:bg-white/90 transition-all"
+                  className="rounded-full text-xs font-semibold bg-white text-amber-700 border-0 shadow-md hover:shadow-lg hover:bg-amber-50 hover:text-amber-800 transition-all"
                 >
                   <Check className="h-3.5 w-3.5 mr-1.5" />
                   Apply suggestion
@@ -66,7 +66,7 @@ const SmartIrrigationTipCard = ({
                 <Link href={`/irrigation-tips/${farmId}`}>
                   <Button 
                     variant="outline" 
-                    className="rounded-full text-xs font-semibold text-white bg-amber-600/30 backdrop-blur-sm border border-white/20 shadow-sm hover:bg-amber-600/40"
+                    className="rounded-full text-xs font-semibold text-white bg-amber-600/30 backdrop-blur-sm border border-white/20 shadow-sm hover:bg-white/20 hover:text-white transition-all"
                   >
                     {t.viewDetails}
                     <ArrowRight className="h-3 w-3 ml-1.5" />
