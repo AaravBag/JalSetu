@@ -43,15 +43,15 @@ const WaterPredictionCard = ({
   const getWeatherBackground = (weather: string) => {
     switch (weather) {
       case "sunny":
-        return "from-amber-50 to-orange-50 border-amber-100";
+        return "from-amber-50 to-orange-50 border-amber-100 dark:from-amber-900/30 dark:to-orange-900/30 dark:border-amber-800";
       case "cloudy":
-        return "from-gray-50 to-slate-50 border-gray-100";
+        return "from-gray-50 to-slate-50 border-gray-100 dark:from-gray-800 dark:to-slate-800 dark:border-gray-700";
       case "rainy":
-        return "from-blue-50 to-indigo-50 border-blue-100";
+        return "from-blue-50 to-indigo-50 border-blue-100 dark:from-blue-900/30 dark:to-indigo-900/30 dark:border-blue-800";
       case "partly-cloudy":
-        return "from-blue-50 to-amber-50 border-blue-100";
+        return "from-blue-50 to-amber-50 border-blue-100 dark:from-blue-900/30 dark:to-amber-900/30 dark:border-blue-800";
       default:
-        return "from-gray-50 to-white border-gray-100";
+        return "from-gray-50 to-white border-gray-100 dark:from-gray-800 dark:to-gray-700 dark:border-gray-600";
     }
   };
 
