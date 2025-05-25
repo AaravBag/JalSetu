@@ -34,9 +34,9 @@ const Header = () => {
       <div className="flex items-center justify-between fade-in">
         <div>
           <h1 className="text-2xl font-bold flex items-center">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Jal</span>
-            <span className="text-secondary dark:text-blue-400 font-black">Setu</span>
-            <Droplet className="ml-1 h-5 w-5 text-secondary dark:text-blue-400" fill={darkMode ? "#3b82f6" : "#3b82f6"} fillOpacity={0.2} />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">Jal</span>
+            <span className="text-blue-600 dark:text-blue-400 font-black">Setu</span>
+            <Droplet className="ml-1 h-5 w-5 text-blue-600 dark:text-blue-400" fill={darkMode ? "#60a5fa" : "#2563eb"} fillOpacity={0.2} />
           </h1>
           <p className="text-sm font-medium text-neutral-dark dark:text-gray-300 opacity-75">Smart Water Management</p>
         </div>
