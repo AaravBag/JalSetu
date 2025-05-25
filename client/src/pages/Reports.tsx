@@ -304,8 +304,8 @@ const Reports = () => {
                   <Calendar className="h-9 w-9 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-xl text-gray-800 dark:text-white">Seasonal Analytics</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Year-over-year performance trends</p>
+                  <h3 className="font-bold text-xl text-gray-800 dark:text-white">{t.seasonalAnalytics}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t.seasonalAnalyticsDesc}</p>
                 </div>
               </div>
               
