@@ -27,13 +27,13 @@ const SoilMoistureDetails = () => {
   const getStatusClass = (status: string) => {
     switch (status) {
       case "optimal":
-        return "bg-primary/10 text-primary border-primary/20";
+        return "bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary border-primary/20 dark:border-primary/30";
       case "warning":
-        return "bg-amber-50 text-amber-600 border-amber-200";
+        return "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800";
       case "danger":
-        return "bg-red-50 text-red-600 border-red-200";
+        return "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800";
       default:
-        return "bg-primary/10 text-primary border-primary/20";
+        return "bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary border-primary/20 dark:border-primary/30";
     }
   };
 
@@ -136,8 +136,8 @@ const SoilMoistureDetails = () => {
                     </div>
                     
                     <div className="flex-1 ml-5">
-                      <h4 className="font-bold text-gray-800">{moistureStatus}</h4>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <h4 className="font-bold text-gray-800 dark:text-gray-200">{moistureStatus}</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                         Current soil moisture is optimal for your crops.
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
@@ -220,16 +220,16 @@ const SoilMoistureDetails = () => {
               <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0">
                 <CardContent className="p-5">
                   <div className="space-y-3">
-                    <div className="bg-green-50 border border-green-100 rounded-xl p-3">
-                      <h4 className="text-sm font-bold text-green-700 mb-1">Field 1 - North Paddy</h4>
-                      <p className="text-sm text-gray-700">
+                    <div className="bg-green-50 dark:bg-green-900/30 border border-green-100 dark:border-green-800 rounded-xl p-3">
+                      <h4 className="text-sm font-bold text-green-700 dark:text-green-400 mb-1">Field 1 - North Paddy</h4>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
                         Currently at <strong>70%</strong> moisture level. Optimal for rice cultivation at current growth stage. No irrigation needed for the next 48 hours.
                       </p>
                     </div>
                     
-                    <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
-                      <h4 className="text-sm font-bold text-amber-700 mb-1">Field 2 - South Vegetable Patch</h4>
-                      <p className="text-sm text-gray-700">
+                    <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-100 dark:border-amber-800 rounded-xl p-3">
+                      <h4 className="text-sm font-bold text-amber-700 dark:text-amber-400 mb-1">Field 2 - South Vegetable Patch</h4>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
                         Currently at <strong>45%</strong> moisture level. Below optimal for vegetable crops. Schedule irrigation within the next 24 hours to avoid potential crop stress.
                       </p>
                     </div>

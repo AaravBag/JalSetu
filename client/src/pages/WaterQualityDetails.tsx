@@ -27,15 +27,15 @@ const WaterQualityDetails = () => {
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case "good":
-        return "text-green-500 bg-green-50";
+        return "text-green-500 bg-green-50 dark:bg-green-900/30 dark:text-green-400";
       case "warm":
       case "warning":
-        return "text-amber-500 bg-amber-50";
+        return "text-amber-500 bg-amber-50 dark:bg-amber-900/30 dark:text-amber-400";
       case "bad":
       case "danger":
-        return "text-red-500 bg-red-50";
+        return "text-red-500 bg-red-50 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return "text-gray-500 bg-gray-50";
+        return "text-gray-500 bg-gray-50 dark:bg-gray-800 dark:text-gray-400";
     }
   };
 
@@ -93,13 +93,13 @@ const WaterQualityDetails = () => {
                     ]).map((metric, index) => (
                       <div 
                         key={index} 
-                        className="bg-white rounded-2xl p-3 flex flex-col items-center justify-center shadow-sm border border-gray-50"
+                        className="bg-white dark:bg-gray-800 rounded-2xl p-3 flex flex-col items-center justify-center shadow-sm border border-gray-50 dark:border-gray-700"
                       >
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/5 flex items-center justify-center mb-2">
                           {getIcon(metric.icon)}
                         </div>
-                        <span className="text-xs text-gray-500 font-medium">{metric.name}</span>
-                        <span className="font-bold text-lg">{metric.value}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{metric.name}</span>
+                        <span className="font-bold text-lg text-gray-800 dark:text-gray-200">{metric.value}</span>
                         <span className={`text-xs px-2 py-0.5 rounded-full mt-1 font-medium ${getStatusColor(metric.status)}`}>
                           {metric.unit || metric.status}
                         </span>
@@ -174,21 +174,21 @@ const WaterQualityDetails = () => {
               <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0">
                 <CardContent className="p-5">
                   <div className="space-y-3">
-                    <div className="bg-green-50 border border-green-100 rounded-xl p-3">
-                      <p className="text-sm text-gray-700">
-                        <strong className="text-green-600">pH Level (6.8):</strong> Your water pH is optimal for most crops. Maintain the current irrigation system.
+                    <div className="bg-green-50 dark:bg-green-900/30 border border-green-100 dark:border-green-800 rounded-xl p-3">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <strong className="text-green-600 dark:text-green-400">pH Level (6.8):</strong> Your water pH is optimal for most crops. Maintain the current irrigation system.
                       </p>
                     </div>
                     
-                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-                      <p className="text-sm text-gray-700">
-                        <strong className="text-blue-600">TDS (320 ppm):</strong> Good mineral content for plant growth. Consider testing specific nutrients if growing specialized crops.
+                    <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 rounded-xl p-3">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <strong className="text-blue-600 dark:text-blue-400">TDS (320 ppm):</strong> Good mineral content for plant growth. Consider testing specific nutrients if growing specialized crops.
                       </p>
                     </div>
                     
-                    <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
-                      <p className="text-sm text-gray-700">
-                        <strong className="text-amber-600">Temperature (28°C):</strong> Slightly warm. Consider early morning irrigation to minimize evaporation and heat stress on plants.
+                    <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-100 dark:border-amber-800 rounded-xl p-3">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <strong className="text-amber-600 dark:text-amber-400">Temperature (28°C):</strong> Slightly warm. Consider early morning irrigation to minimize evaporation and heat stress on plants.
                       </p>
                     </div>
                   </div>
