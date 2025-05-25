@@ -1,0 +1,12 @@
+{
+  "buildCommand": "vite build",
+  "outputDirectory": "dist/public",
+  "framework": "vite",
+  "rewrites": [
+    { 
+      "source": "/api/:path*", 
+      "destination": "https://your-backend-url.com/api/:path*" 
+    }
+  ],
+  "devCommand": "vite dev"
+}
