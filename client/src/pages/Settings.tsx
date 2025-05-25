@@ -48,18 +48,18 @@ const Settings = () => {
   
   const settingsSections: SettingsSection[] = [
     {
-      title: "Account",
+      title: t.account,
       items: [
         {
           id: "profile",
-          label: "Profile Information",
+          label: t.profileInfo,
           icon: <User className="h-5 w-5 text-blue-500" />,
           action: <ChevronRight className="h-5 w-5 text-gray-400" />,
           onClick: () => navigate('/edit-profile')
         },
         {
           id: "language",
-          label: "Language",
+          label: t.language,
           icon: <Languages className="h-5 w-5 text-green-500" />,
           subtext: availableLanguages.find(lang => lang.code === language)?.name || "English",
           action: <ChevronRight className="h-5 w-5 text-gray-400" />,
@@ -68,11 +68,11 @@ const Settings = () => {
       ]
     },
     {
-      title: "Preferences",
+      title: t.preferences,
       items: [
         {
           id: "darkMode",
-          label: "Dark Mode",
+          label: t.darkMode,
           icon: darkMode ? <Moon className="h-5 w-5 text-purple-500" /> : <Sun className="h-5 w-5 text-amber-500" />,
           action: (
             <Switch 
@@ -80,8 +80,8 @@ const Settings = () => {
               onCheckedChange={() => {
                 toggleDarkMode();
                 toast({
-                  title: darkMode ? "Light mode enabled" : "Dark mode enabled",
-                  description: "Your theme preference has been updated."
+                  title: darkMode ? t.lightModeEnabled : t.darkModeEnabled,
+                  description: t.themeUpdated
                 });
               }} 
               className="data-[state=checked]:bg-primary" 
@@ -90,7 +90,7 @@ const Settings = () => {
         },
         {
           id: "animations",
-          label: "Enable Animations",
+          label: t.enableAnimations,
           icon: <Sparkles className="h-5 w-5 text-yellow-500" />,
           action: (
             <Switch 
@@ -108,7 +108,7 @@ const Settings = () => {
         },
         {
           id: "notifications",
-          label: "Push Notifications",
+          label: t.pushNotifications,
           icon: <Bell className="h-5 w-5 text-red-500" />,
           action: (
             <Switch 
@@ -128,18 +128,18 @@ const Settings = () => {
       ]
     },
     {
-      title: "Support",
+      title: t.support,
       items: [
         {
           id: "help",
-          label: "Help & FAQ",
+          label: t.helpFaq,
           icon: <HelpCircle className="h-5 w-5 text-amber-500" />,
           action: <ChevronRight className="h-5 w-5 text-gray-400" />,
           onClick: () => navigate('/help-chatbot')
         },
         {
           id: "logout",
-          label: "Logout",
+          label: t.logout,
           icon: <LogOut className="h-5 w-5 text-gray-500" />,
           action: <ChevronRight className="h-5 w-5 text-gray-400" />,
           onClick: handleLogout
@@ -170,9 +170,9 @@ const Settings = () => {
         <div className="flex items-center justify-between">
           <div className="fade-in">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white gradient-text">
-              Settings
+              {t.settingsTitle}
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">Customize your app experience</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">{t.settingsSubtitle}</p>
           </div>
           <div className="h-12 w-12 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center shadow-md border border-gray-100 dark:border-gray-700 pulse-effect">
             <SettingsIcon className="h-6 w-6 text-purple-500 dark:text-purple-400" />
@@ -206,7 +206,7 @@ const Settings = () => {
                   onClick={() => navigate('/edit-profile')}
                 >
                   <span className="text-sm text-blue-700 dark:text-blue-300 font-medium text-center w-full flex items-center justify-center">
-                    Edit Profile
+                    {t.editProfile}
                     <ChevronRight className="h-4 w-4 ml-1.5 opacity-70" />
                   </span>
                 </div>
@@ -273,7 +273,7 @@ const Settings = () => {
       <Dialog open={languageDialogOpen} onOpenChange={setLanguageDialogOpen}>
         <DialogContent className="sm:max-w-md rounded-xl">
           <DialogHeader>
-            <DialogTitle className="text-center">Select Language</DialogTitle>
+            <DialogTitle className="text-center">{t.language}</DialogTitle>
             <DialogDescription className="text-center">
               Choose your preferred language for the application
             </DialogDescription>
@@ -290,7 +290,7 @@ const Settings = () => {
                 onClick={() => {
                   setLanguage(lang.code);
                   toast({
-                    title: "Language Updated",
+                    title: t.languageChanged,
                     description: `App language changed to ${lang.name}`,
                   });
                   setLanguageDialogOpen(false);
@@ -307,7 +307,7 @@ const Settings = () => {
           <DialogFooter className="sm:justify-center">
             <DialogClose asChild>
               <button className="rounded-lg px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                Cancel
+                {t.back}
               </button>
             </DialogClose>
           </DialogFooter>
