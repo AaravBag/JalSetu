@@ -9,9 +9,11 @@ interface SmartIrrigationTipCardProps {
 }
 
 const SmartIrrigationTipCard = ({ 
-  tip = "Based on your soil type and current moisture levels, water your crops early morning (5-7 AM) to minimize evaporation and maximize absorption.",
+  tip,
   farmId = 1
 }: SmartIrrigationTipCardProps) => {
+  // Default tip if none is provided
+  const displayTip = tip || "Based on your soil type and current moisture levels, water your crops early morning (5-7 AM) to minimize evaporation and maximize absorption.";
   return (
     <div className="mb-6">
       <h3 className="text-lg font-bold mb-3 flex items-center gradient-text">
@@ -48,7 +50,7 @@ const SmartIrrigationTipCard = ({
                   SMART
                 </div>
               </div>
-              <p className="text-sm text-white/90 mt-2 mb-4">{tip}</p>
+              <p className="text-sm text-white/90 mt-2 mb-4">{displayTip}</p>
               
               <div className="flex flex-wrap gap-2">
                 <Button 

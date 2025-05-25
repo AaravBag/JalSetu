@@ -1,4 +1,4 @@
-import { Cloud, Sun, CloudRain, CloudSun, Umbrella, ArrowRight } from "lucide-react";
+import { Cloud, Sun, CloudRain, CloudSun, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 

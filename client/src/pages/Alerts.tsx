@@ -182,15 +182,6 @@ export default function Alerts() {
                     Showing {visibleAlerts.length} of {alerts.length} alerts
                   </p>
                 </div>
-                
-                <button 
-                  type="button"
-                  className="flex items-center text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm px-3 py-1"
-                  onClick={clearAllAlerts}
-                >
-                  <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                  Clear All
-                </button>
               </div>
             
               {visibleAlerts.map((alert, index) => {
@@ -233,17 +224,7 @@ export default function Alerts() {
                 );
               })}
               
-              {visibleCount < alerts.length && (
-                <div className="flex justify-center mt-6 fade-in">
-                  <button 
-                    type="button"
-                    className="rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2"
-                    onClick={loadMoreAlerts}
-                  >
-                    Load More
-                  </button>
-                </div>
-              )}
+
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-10 fade-in">
