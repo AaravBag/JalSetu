@@ -81,8 +81,12 @@ const Alerts = () => {
     }
   ];
   
-  const loadMoreAlerts = () => {
-    if (visibleAlerts < allAlerts.length) {
+  const loadMoreAlerts = (e: React.MouseEvent) => {
+    // Prevent default to avoid page refresh
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (visibleAlerts < nonDismissedAlerts.length) {
       setVisibleAlerts(prevCount => Math.min(prevCount + 4, allAlerts.length));
       toast({
         title: "Alerts Loaded",
@@ -104,7 +108,11 @@ const Alerts = () => {
     });
   };
   
-  const handleClearAll = () => {
+  const handleClearAll = (e: React.MouseEvent) => {
+    // Prevent default to avoid page refresh
+    e.preventDefault();
+    e.stopPropagation();
+    
     const ids = filteredAlerts.map(alert => alert.id);
     setDismissedAlerts(prev => [...prev, ...ids]);
     toast({
@@ -113,9 +121,11 @@ const Alerts = () => {
     });
   };
   
-  const filteredAlerts = allAlerts
-    .filter(alert => !dismissedAlerts.includes(alert.id))
-    .slice(0, visibleAlerts);
+  // Get all non-dismissed alerts
+  const nonDismissedAlerts = allAlerts.filter(alert => !dismissedAlerts.includes(alert.id));
+  
+  // Get the visible alerts to display
+  const filteredAlerts = nonDismissedAlerts.slice(0, visibleAlerts);
 
   const getAlertStyles = (type: string) => {
     switch(type) {

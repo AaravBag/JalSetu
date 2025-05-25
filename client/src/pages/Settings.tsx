@@ -99,6 +99,7 @@ const Settings = () => {
             <Switch 
               checked={notifications} 
               onCheckedChange={(val) => {
+                // Prevent setting the notifications value from refreshing the page
                 setNotifications(val);
                 toast({
                   title: val ? "Notifications enabled" : "Notifications disabled",
