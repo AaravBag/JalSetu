@@ -1,13 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Send, Bot, User as UserIcon, XCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
-import { Send, ArrowLeft, Bot, User as UserIcon, XCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/LanguageContext';
-import { apiRequest } from '@/lib/queryClient';
 
 type Message = {
   id: string;
@@ -51,6 +49,74 @@ export default function HelpChatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Predefined responses for common farming and irrigation questions
+  const getLocalResponse = (question: string): string => {
+    const lowerQuestion = question.toLowerCase();
+    
+    // Irrigation scheduling
+    if (lowerQuestion.includes('irrigation') && (lowerQuestion.includes('schedule') || lowerQuestion.includes('timing') || lowerQuestion.includes('optimize'))) {
+      return "For optimal irrigation scheduling: Water early morning (5-7 AM) or evening (6-8 PM) to minimize evaporation. Check soil moisture at 2-3 inch depth - if dry, it's time to water. Most crops need 1-2 inches of water per week. Use JalSetu's soil moisture sensors to get precise readings for your specific fields.";
+    }
+    
+    // Soil moisture readings
+    if (lowerQuestion.includes('soil moisture') || lowerQuestion.includes('moisture reading') || lowerQuestion.includes('moisture mean')) {
+      return "Soil moisture levels: 0-30% = Dry (needs immediate watering), 30-60% = Optimal range for most crops, 60-80% = Well watered, 80-100% = Saturated (risk of overwatering). Different crops have different needs - rice prefers 80-90%, wheat 40-60%, vegetables 50-70%. Check readings at multiple depths for best results.";
+    }
+    
+    // Water quality metrics
+    if (lowerQuestion.includes('water quality') || lowerQuestion.includes('ph') || lowerQuestion.includes('tds') || lowerQuestion.includes('interpret')) {
+      return "Water quality guidelines: pH should be 6.0-7.5 for most crops (slightly acidic to neutral). TDS (Total Dissolved Solids) should be below 1000 ppm for irrigation. Temperature should be 15-25°C for optimal plant absorption. High salinity (>1000 ppm TDS) can damage crops. Test water regularly, especially from bore wells.";
+    }
+    
+    // Rice specific
+    if (lowerQuestion.includes('rice') && (lowerQuestion.includes('moisture') || lowerQuestion.includes('optimal'))) {
+      return "Rice water management: Maintain 2-5 cm standing water during tillering and flowering stages. Soil moisture should be 80-90%. Drain fields 1-2 weeks before harvest. For direct seeded rice, maintain 90-100% soil moisture for first 3 weeks, then manage like transplanted rice.";
+    }
+    
+    // Drought and water conservation
+    if (lowerQuestion.includes('drought') || lowerQuestion.includes('conserve') || lowerQuestion.includes('save water')) {
+      return "Water conservation during drought: 1) Use drip irrigation or micro-sprinklers, 2) Apply mulch to reduce evaporation, 3) Water deeply but less frequently, 4) Choose drought-resistant crop varieties, 5) Harvest rainwater when possible, 6) Monitor soil moisture closely with sensors to avoid overwatering.";
+    }
+    
+    // Vegetable farming
+    if (lowerQuestion.includes('vegetable') || lowerQuestion.includes('tomato') || lowerQuestion.includes('garden') || lowerQuestion.includes('watering practices')) {
+      return "Vegetable irrigation: Leafy greens need frequent light watering (daily in hot weather). Root vegetables like carrots need deep weekly watering. Fruiting vegetables (tomatoes, peppers) need consistent moisture - water when top 2 inches of soil are dry. Avoid wetting leaves to prevent disease.";
+    }
+    
+    // Fertilizer and nutrients
+    if (lowerQuestion.includes('fertilizer') || lowerQuestion.includes('nutrient') || lowerQuestion.includes('nitrogen')) {
+      return "Nutrient management: Apply nitrogen fertilizer in split doses - 1/3 at planting, 1/3 at tillering, 1/3 at flowering. Phosphorus at planting only. Potassium throughout growing season. Always water after fertilizer application. Soil testing helps determine exact nutrient needs.";
+    }
+    
+    // Crop diseases
+    if (lowerQuestion.includes('disease') || lowerQuestion.includes('fungus') || lowerQuestion.includes('pest')) {
+      return "Disease prevention: Avoid overwatering which creates fungal conditions. Water at soil level, not on leaves. Ensure good drainage. Rotate crops annually. Remove infected plant debris. Use resistant varieties when available. Monitor regularly for early detection.";
+    }
+    
+    // Weather and seasons
+    if (lowerQuestion.includes('weather') || lowerQuestion.includes('season') || lowerQuestion.includes('rain')) {
+      return "Weather-based irrigation: Reduce watering before expected rain. Increase frequency during hot, dry periods. Protect crops from heavy rain with drainage. Monitor weather forecasts and adjust irrigation schedules accordingly. Use JalSetu's weather predictions for better planning.";
+    }
+    
+    // Technology and sensors
+    if (lowerQuestion.includes('sensor') || lowerQuestion.includes('technology') || lowerQuestion.includes('jalsetu')) {
+      return "JalSetu technology: Our IoT sensors monitor soil moisture, temperature, and humidity in real-time. Data is sent to your smartphone for instant alerts. AI analyzes patterns to suggest optimal watering times. Solar-powered sensors work continuously. Easy to install and maintain.";
+    }
+    
+    // Greeting responses
+    if (lowerQuestion.includes('hello') || lowerQuestion.includes('hi') || lowerQuestion.includes('hey')) {
+      return "Hello! I'm here to help you with all your farming and irrigation questions. You can ask me about irrigation scheduling, soil moisture, water quality, crop care, or any farming-related topics.";
+    }
+    
+    // Thank you responses
+    if (lowerQuestion.includes('thank') || lowerQuestion.includes('thanks')) {
+      return "You're welcome! I'm always here to help with your farming and irrigation questions. Feel free to ask me anything about crop care, water management, or JalSetu technology.";
+    }
+    
+    // Default response for unmatched questions
+    return "I can help you with questions about irrigation scheduling, soil moisture levels, water quality, crop-specific advice, drought management, vegetable farming, fertilizer application, disease prevention, weather planning, and JalSetu technology. Please ask me about any of these topics for detailed guidance.";
+  };
+
   const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
     
@@ -68,89 +134,20 @@ export default function HelpChatbot() {
     setInputValue('');
     setIsLoading(true);
     
-    try {
-      // Format message history for API
-      const messageHistory = messages
-        .filter(m => m.id !== '1') // Skip welcome message
-        .map(m => ({ 
-          role: m.sender, 
-          content: m.text 
-        }));
+    // Simulate a short delay to make it feel natural
+    setTimeout(() => {
+      const response = getLocalResponse(userMessage.text);
       
-      // Call our Gemini API endpoint
-      const response = await apiRequest('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          message: userMessage.text,
-          history: messageHistory
-        }),
-      });
-      
-      // Parse the response and handle errors
-      const data = response as any;
-      // Handle various response formats and ensure we have a response
-      if (typeof data !== 'object' || data === null) {
-        throw new Error('Invalid response format from server');
-      }
-      
-      if (data.error && !data.response) {
-        throw new Error(data.error || 'Error from server');
-      }
-      
-      // Ensure we have a response text
-      if (!data.response) {
-        // Create a fallback response if none is provided
-        data.response = "I'm having trouble connecting to my knowledge base right now. Please try asking about irrigation, soil moisture, or water quality topics.";
-        data.apiKeyError = true;
-      }
-      
-      // Add bot response to chat
       const botMessage: Message = {
         id: Date.now().toString(),
-        text: data.response,
+        text: response,
         sender: 'bot',
         timestamp: new Date(),
       };
-      
-      // If we hit a rate limit, let the user know they can try again later
-      if (data.rateLimited) {
-        toast({
-          title: "Usage Limit Reached",
-          description: "The AI service is experiencing high demand. Please try again in a minute.",
-        });
-      }
-      
-      // If there's an API key error, let the user know
-      if (data.apiKeyError) {
-        toast({
-          title: "Connection Issue",
-          description: "The chatbot AI service needs a valid API key to be configured.",
-        });
-      }
       
       setMessages(prev => [...prev, botMessage]);
-    } catch (error: any) {
-      console.error('Chatbot error:', error);
-      
-      // Create a fallback response
-      const fallbackMessage: Message = {
-        id: Date.now().toString(),
-        text: "I'm having trouble connecting to my knowledge base right now. Please check if the API key is properly set up or try again later.",
-        sender: 'bot',
-        timestamp: new Date(),
-      };
-      
-      setMessages(prev => [...prev, fallbackMessage]);
-      
-      toast({
-        title: "Connection Error",
-        description: error.message || "Failed to get a response from the AI. Please check your API key settings.",
-        variant: "destructive",
-      });
-    } finally {
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   const handleFaqClick = (question: string) => {
@@ -171,6 +168,14 @@ export default function HelpChatbot() {
       description: "Your conversation has been reset.",
     });
   };
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">Please log in to access the help chatbot.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
@@ -203,14 +208,14 @@ export default function HelpChatbot() {
       </header>
 
       {/* FAQ Quick Access */}
-      <div className="px-5 py-2">
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Frequently Asked Questions:</p>
-        <div className="flex overflow-x-auto pb-2 space-x-2 no-scrollbar">
-          {faqs.map(faq => (
+      <div className="px-6 mb-4">
+        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Quick Questions:</p>
+        <div className="flex flex-wrap gap-2">
+          {faqs.slice(0, 3).map((faq) => (
             <button
               key={faq.id}
-              className="px-3 py-2 bg-white dark:bg-gray-800 rounded-full text-sm whitespace-nowrap flex-shrink-0 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700"
               onClick={() => handleFaqClick(faq.question)}
+              className="text-xs bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               {faq.question}
             </button>
@@ -270,29 +275,25 @@ export default function HelpChatbot() {
         </div>
       </div>
 
-      {/* Message Input */}
-      <div className="p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-100 dark:border-gray-700">
-        <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
+      {/* Input Area */}
+      <div className="p-4 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
+        <form onSubmit={handleSendMessage} className="flex space-x-2">
           <Input
-            type="text"
-            placeholder="Type your question here..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="rounded-full bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600"
+            placeholder="Ask about irrigation, soil moisture, water quality..."
+            className="flex-1 rounded-full border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
             disabled={isLoading}
           />
-          <Button
-            type="submit"
-            size="icon"
+          <Button 
+            type="submit" 
+            size="icon" 
             className="rounded-full h-10 w-10 bg-primary hover:bg-primary/90"
-            disabled={isLoading || !inputValue.trim()}
+            disabled={isLoading}
           >
-            <Send className="h-5 w-5 text-white" />
+            <Send className="h-4 w-4" />
           </Button>
         </form>
-        <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">
-          JalSetu Farming Assistant with Eden AI
-        </p>
       </div>
     </div>
   );
