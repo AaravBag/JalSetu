@@ -176,13 +176,7 @@ export default function Alerts() {
         <div className="space-y-4">
           {alerts.length > 0 ? (
             <>
-              <div className="flex justify-between items-center mb-4">
-                <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-100 dark:border-gray-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                    Showing {visibleAlerts.length} of {alerts.length} alerts
-                  </p>
-                </div>
-              </div>
+
             
               {visibleAlerts.map((alert, index) => {
                 const styles = getAlertStyles(alert.type);
@@ -199,18 +193,9 @@ export default function Alerts() {
                         </div>
                         
                         <div className="flex-1">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base">{alert.title}</h3>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1.5 pr-6">{alert.message}</p>
-                            </div>
-                            <button 
-                              type="button"
-                              className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors"
-                              onClick={() => dismissAlert(alert.id)}
-                            >
-                              <XCircle className="h-5 w-5" />
-                            </button>
+                          <div>
+                            <h3 className="font-bold text-gray-900 dark:text-gray-100 text-base">{alert.title}</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1.5">{alert.message}</p>
                           </div>
                           
                           <div className="flex justify-between items-center mt-4">
