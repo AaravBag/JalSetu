@@ -1,4 +1,5 @@
 import { Leaf, Sun, Cloud, CloudRain } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface WelcomeCardProps {
   farmerName: string;
@@ -6,6 +7,8 @@ interface WelcomeCardProps {
 }
 
 const WelcomeCard = ({ farmerName, farmStatus }: WelcomeCardProps) => {
+  const { t, language } = useLanguage();
+  
   // Get current time to display appropriate greeting
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
@@ -13,7 +16,15 @@ const WelcomeCard = ({ farmerName, farmStatus }: WelcomeCardProps) => {
   // Get current date
   const date = new Date();
   const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
-  const formattedDate = date.toLocaleDateString('en-US', options);
+  const formattedDate = date.toLocaleDateString(
+    language === 'en' ? 'en-US' : 
+    language === 'es' ? 'es-ES' : 
+    language === 'hi' ? 'hi-IN' : 
+    language === 'fr' ? 'fr-FR' : 
+    language === 'de' ? 'de-DE' : 
+    language === 'pt' ? 'pt-BR' : 'en-US', 
+    options
+  );
   
   return (
     <div className="mb-1">

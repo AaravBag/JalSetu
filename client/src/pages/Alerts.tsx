@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Define alert types
 type AlertType = "info" | "warning" | "danger";
@@ -89,6 +90,7 @@ const SAMPLE_ALERTS: Alert[] = [
 // Component for alerts page
 export default function Alerts() {
   const { toast } = useToast();
+  const { t } = useLanguage();
   
   // State for alerts and visible count
   const [alerts, setAlerts] = useState<Alert[]>(SAMPLE_ALERTS);
@@ -162,9 +164,9 @@ export default function Alerts() {
         <div className="flex items-center justify-between">
           <div className="fade-in">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white gradient-text">
-              Alerts
+              {t.alertsTitle}
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">Important notifications & warnings</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">{t.alertsSubtitle}</p>
           </div>
           <div className="h-12 w-12 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center shadow-md border border-gray-100 dark:border-gray-700 pulse-effect">
             <Bell className="h-6 w-6 text-red-500 dark:text-red-400" />

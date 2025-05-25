@@ -1,6 +1,7 @@
 import { TestTube, Droplet, Scale, Thermometer, ArrowRight, Waves } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface QualityMetric {
   name: string;
@@ -16,6 +17,7 @@ interface WaterQualityCardProps {
 }
 
 const WaterQualityCard = ({ qualityMetrics = [], farmId = 1 }: WaterQualityCardProps) => {
+  const { t } = useLanguage();
   const getIcon = (icon: string) => {
     switch (icon) {
       case "ph":
