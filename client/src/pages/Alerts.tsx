@@ -198,7 +198,16 @@ const Alerts = () => {
                     variant="outline" 
                     size="sm" 
                     className="text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm"
-                    onClick={handleClearAll}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const ids = nonDismissedAlerts.map(alert => alert.id);
+                      setDismissedAlerts(prev => [...prev, ...ids]);
+                      toast({
+                        title: "All Alerts Cleared",
+                        description: "Your alerts have been cleared."
+                      });
+                    }}
                   >
                     <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                     Clear All
@@ -246,12 +255,20 @@ const Alerts = () => {
                 );
               })}
               
-              {visibleAlerts < allAlerts.length - dismissedAlerts.length && (
+              {visibleAlerts < nonDismissedAlerts.length && (
                 <div className="flex justify-center mt-6 fade-in">
                   <Button 
                     variant="outline" 
                     className="rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={loadMoreAlerts}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setVisibleAlerts(prevCount => Math.min(prevCount + 4, nonDismissedAlerts.length));
+                      toast({
+                        title: "Alerts Loaded",
+                        description: "Showing more alerts from your history."
+                      });
+                    }}
                   >
                     Load More
                   </Button>
