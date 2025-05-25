@@ -6,10 +6,12 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { useTheme } from "@/context/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Reports = () => {
   const { darkMode } = useTheme();
   const { toast } = useToast();
+  const { t } = useLanguage();
   
   // Sample data for reports
   const waterUsageData = [
@@ -74,9 +76,9 @@ const Reports = () => {
         <div className="flex items-center justify-between">
           <div className="fade-in">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white gradient-text">
-              Reports
+              {t.reportsTitle}
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">Track your farm performance analytics</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">{t.reportsSubtitle}</p>
           </div>
           <div className="h-12 w-12 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center shadow-md border border-gray-100 dark:border-gray-700 pulse-effect">
             <FilterX className="h-6 w-6 text-blue-500 dark:text-blue-400" />
@@ -102,8 +104,8 @@ const Reports = () => {
                   <BarChart2 className="h-9 w-9 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-xl text-gray-800 dark:text-white">Water Usage</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Track irrigation and rainfall data</p>
+                  <h3 className="font-bold text-xl text-gray-800 dark:text-white">{t.waterUsage}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t.waterUsageDesc}</p>
                 </div>
               </div>
               
@@ -202,8 +204,8 @@ const Reports = () => {
                   <Database className="h-9 w-9 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-xl text-gray-800 dark:text-white">Soil Health</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Analyze soil moisture and nutrients</p>
+                  <h3 className="font-bold text-xl text-gray-800 dark:text-white">{t.soilHealth}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t.soilHealthDesc}</p>
                 </div>
               </div>
               
