@@ -87,7 +87,7 @@ const WaterPredictionCard = ({
             <div>
               <h4 className="font-bold text-gray-800 dark:text-gray-200 text-lg">{prediction}</h4>
               <div className="flex items-center mt-2">
-                <Umbrella className="h-4 w-4 text-blue-500 mr-2" />
+                <CloudRain className="h-4 w-4 text-blue-500 mr-2" />
                 <p className="text-sm text-gray-600 dark:text-gray-400">{advice}</p>
               </div>
             </div>

@@ -114,7 +114,7 @@ const Home = () => {
             
             <div className="slide-in-bottom" style={{ animationDelay: '0.4s' }}>
               <SmartIrrigationTipCard 
-                tip={farmData?.irrigationTip || ""}
+                tip={farmData?.irrigationTip || "Based on soil moisture and weather forecast, consider watering your crops tomorrow morning to ensure optimal growth."}
                 farmId={farmData?.farm?.id}
               />
             </div>
