@@ -4,17 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useTheme } from "@/context/ThemeContext";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+type AlertType = "info" | "warning" | "danger";
+
+interface Alert {
+  id: number;
+  title: string;
+  message: string;
+  time: string;
+  type: AlertType;
+  icon: JSX.Element;
+}
+
 const Alerts = () => {
-  const { darkMode } = useTheme();
   const { toast } = useToast();
-  const [visibleAlerts, setVisibleAlerts] = useState(4);
-  const [dismissedAlerts, setDismissedAlerts] = useState<number[]>([]);
   
   // Sample alerts for demonstration
-  const allAlerts = [
+  const initialAlerts: Alert[] = [
     { 
       id: 1, 
       title: "Low Soil Moisture", 
@@ -81,53 +89,42 @@ const Alerts = () => {
     }
   ];
   
-  const loadMoreAlerts = (e: React.MouseEvent) => {
-    // Prevent default to avoid page refresh
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (visibleAlerts < nonDismissedAlerts.length) {
-      setVisibleAlerts(prevCount => Math.min(prevCount + 4, allAlerts.length));
-      toast({
-        title: "Alerts Loaded",
-        description: "Showing more alerts from your history."
-      });
-    } else {
-      toast({
-        title: "No More Alerts",
-        description: "You've reached the end of your alerts history."
-      });
-    }
-  };
+  // State to manage visible alerts and display count
+  const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
+  const [visibleCount, setVisibleCount] = useState(4);
   
-  const dismissAlert = (id: number) => {
-    setDismissedAlerts(prev => [...prev, id]);
+  // Handler to dismiss a single alert
+  const dismissAlert = useCallback((id: number) => {
+    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== id));
     toast({
       title: "Alert Dismissed",
       description: "The alert has been removed from your list."
     });
-  };
+  }, [toast]);
   
-  const handleClearAll = (e: React.MouseEvent) => {
-    // Prevent default to avoid page refresh
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const ids = filteredAlerts.map(alert => alert.id);
-    setDismissedAlerts(prev => [...prev, ...ids]);
+  // Handler to clear all alerts
+  const clearAllAlerts = useCallback(() => {
+    setAlerts([]);
     toast({
       title: "All Alerts Cleared",
       description: "Your alerts have been cleared."
     });
-  };
+  }, [toast]);
   
-  // Get all non-dismissed alerts
-  const nonDismissedAlerts = allAlerts.filter(alert => !dismissedAlerts.includes(alert.id));
+  // Handler to load more alerts
+  const loadMoreAlerts = useCallback(() => {
+    setVisibleCount(prev => Math.min(prev + 4, alerts.length));
+    toast({
+      title: "Alerts Loaded",
+      description: "Showing more alerts from your history."
+    });
+  }, [alerts.length, toast]);
   
-  // Get the visible alerts to display
-  const filteredAlerts = nonDismissedAlerts.slice(0, visibleAlerts);
-
-  const getAlertStyles = (type: string) => {
+  // Get only the alerts that should be visible based on the current count
+  const visibleAlerts = alerts.slice(0, visibleCount);
+  
+  // Style utility function for different alert types
+  const getAlertStyles = (type: AlertType) => {
     switch(type) {
       case "danger":
         return {
@@ -185,29 +182,20 @@ const Alerts = () => {
       
       <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto z-10">
         <div className="space-y-4">
-          {filteredAlerts.length > 0 ? (
+          {alerts.length > 0 ? (
             <>
               <div className="flex justify-between items-center mb-4">
                 <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-100 dark:border-gray-700">
                   <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                    Showing {filteredAlerts.length} of {allAlerts.length - dismissedAlerts.length} alerts
+                    Showing {visibleAlerts.length} of {alerts.length} alerts
                   </p>
                 </div>
-                {filteredAlerts.length > 0 && (
+                {alerts.length > 0 && (
                   <Button 
                     variant="outline" 
                     size="sm" 
                     className="text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      const ids = nonDismissedAlerts.map(alert => alert.id);
-                      setDismissedAlerts(prev => [...prev, ...ids]);
-                      toast({
-                        title: "All Alerts Cleared",
-                        description: "Your alerts have been cleared."
-                      });
-                    }}
+                    onClick={clearAllAlerts}
                   >
                     <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                     Clear All
@@ -215,14 +203,14 @@ const Alerts = () => {
                 )}
               </div>
             
-              {filteredAlerts.map(alert => {
+              {visibleAlerts.map((alert, index) => {
                 const styles = getAlertStyles(alert.type);
                 
                 return (
                   <Card 
                     key={alert.id} 
                     className={`rounded-2xl shadow-md overflow-hidden border glass-effect ${styles.container} dark:bg-opacity-10 dark:border-opacity-20 scale-in enhanced-card`}
-                    style={{ animationDelay: `${filteredAlerts.indexOf(alert) * 0.08}s` }}
+                    style={{ animationDelay: `${index * 0.08}s` }}
                   >
                     <CardContent className="p-5 relative">
                       <div className="flex">
@@ -255,20 +243,12 @@ const Alerts = () => {
                 );
               })}
               
-              {visibleAlerts < nonDismissedAlerts.length && (
+              {visibleCount < alerts.length && (
                 <div className="flex justify-center mt-6 fade-in">
                   <Button 
                     variant="outline" 
                     className="rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setVisibleAlerts(prevCount => Math.min(prevCount + 4, nonDismissedAlerts.length));
-                      toast({
-                        title: "Alerts Loaded",
-                        description: "Showing more alerts from your history."
-                      });
-                    }}
+                    onClick={loadMoreAlerts}
                   >
                     Load More
                   </Button>
