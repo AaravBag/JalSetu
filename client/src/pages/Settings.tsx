@@ -183,7 +183,7 @@ const Settings = () => {
       <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto z-10">
         <div className="space-y-6">
           {/* Profile Card */}
-          <Card className="rounded-3xl shadow-lg overflow-hidden border-0 gradient-purple scale-in enhanced-card">
+          <Card className="rounded-3xl shadow-lg overflow-hidden border-0 bg-white dark:bg-gray-800 scale-in enhanced-card">
             <CardContent className="p-6 relative">
               <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white opacity-10"></div>
               <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-white opacity-10"></div>
@@ -194,18 +194,18 @@ const Settings = () => {
                     <User className="h-10 w-10 text-white" />
                   </div>
                 </div>
-                <div className="ml-5 text-white">
-                  <h2 className="text-2xl font-bold text-shadow">{user?.firstName || user?.username || "User"}</h2>
-                  <p className="text-purple-100 text-sm mt-1">{user?.email || "JalSetu User"}</p>
+                <div className="ml-5">
+                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{user?.firstName || user?.username || "User"}</h2>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">{user?.email || "JalSetu User"}</p>
                 </div>
               </div>
               
               <div className="mt-6">
                 <div 
-                  className="bg-white/20 backdrop-blur-sm rounded-xl p-3 flex items-center cursor-pointer hover:bg-white/30 transition-colors shadow-lg border border-white/10"
+                  className="bg-blue-100 dark:bg-blue-900/30 rounded-xl p-3 flex items-center cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors shadow-lg border border-blue-200 dark:border-blue-800/50"
                   onClick={() => navigate('/edit-profile')}
                 >
-                  <span className="text-sm text-white font-medium text-center w-full flex items-center justify-center">
+                  <span className="text-sm text-blue-700 dark:text-blue-300 font-medium text-center w-full flex items-center justify-center">
                     Edit Profile
                     <ChevronRight className="h-4 w-4 ml-1.5 opacity-70" />
                   </span>
