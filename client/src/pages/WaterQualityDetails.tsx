@@ -207,24 +207,24 @@ const WaterQualityDetails = () => {
               
               <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0 mb-6">
                 <CardContent className="p-5">
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                     Your water quality sensors are currently set to record measurements at the following intervals:
                   </p>
                   
                   <div className="space-y-2">
                     <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2">
-                      <span className="text-sm font-medium">Regular Readings</span>
-                      <span className="text-sm text-gray-500">Every 24 hours</span>
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Regular Readings</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Every 24 hours</span>
                     </div>
                     
                     <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-2">
-                      <span className="text-sm font-medium">Irrigation Events</span>
-                      <span className="text-sm text-gray-500">Before & After</span>
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Irrigation Events</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Before & After</span>
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">Weather Alerts</span>
-                      <span className="text-sm text-gray-500">As needed</span>
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Weather Alerts</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">As needed</span>
                     </div>
                   </div>
                 </CardContent>

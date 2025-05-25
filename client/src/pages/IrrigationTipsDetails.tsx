@@ -212,24 +212,24 @@ const IrrigationTipsDetails = () => {
                 <CardContent className="p-5">
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-sm font-medium">Water Usage Efficiency</span>
-                      <span className="text-xs font-semibold text-green-500">92%</span>
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Water Usage Efficiency</span>
+                      <span className="text-xs font-semibold text-green-500 dark:text-green-400">92%</span>
                     </div>
-                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500 rounded-full" style={{ width: '92%' }}></div>
+                    <div className="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-green-500 dark:bg-green-400 rounded-full" style={{ width: '92%' }}></div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1.5">Your irrigation is 15% more efficient than regional average</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">Your irrigation is 15% more efficient than regional average</p>
                   </div>
                   
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-sm font-medium">Water Saved This Month</span>
-                      <span className="text-xs font-semibold text-green-500">43,200 L</span>
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Water Saved This Month</span>
+                      <span className="text-xs font-semibold text-green-500 dark:text-green-400">43,200 L</span>
                     </div>
-                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 rounded-full" style={{ width: '75%' }}></div>
+                    <div className="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 dark:bg-blue-400 rounded-full" style={{ width: '75%' }}></div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1.5">By following AI recommendations, you've saved 43,200 liters of water</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">By following AI recommendations, you've saved 43,200 liters of water</p>
                   </div>
                 </CardContent>
               </Card>

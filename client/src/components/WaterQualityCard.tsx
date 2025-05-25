@@ -21,28 +21,28 @@ const WaterQualityCard = ({ qualityMetrics = [], farmId = 1 }: WaterQualityCardP
   const getIcon = (icon: string) => {
     switch (icon) {
       case "ph":
-        return <Droplet className="h-5 w-5 text-blue-500" />;
+        return <Droplet className="h-5 w-5 text-white" />;
       case "tds":
-        return <Scale className="h-5 w-5 text-blue-500" />;
+        return <Scale className="h-5 w-5 text-white" />;
       case "temp":
-        return <Thermometer className="h-5 w-5 text-blue-600" />;
+        return <Thermometer className="h-5 w-5 text-white" />;
       default:
-        return <Droplet className="h-5 w-5 text-blue-500" />;
+        return <Droplet className="h-5 w-5 text-white" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "good":
-        return "text-green-500 bg-green-50";
+        return "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30";
       case "warm":
       case "warning":
-        return "text-amber-500 bg-amber-50";
+        return "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30";
       case "bad":
       case "danger":
-        return "text-red-500 bg-red-50";
+        return "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30";
       default:
-        return "text-gray-500 bg-gray-50";
+        return "text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800";
     }
   };
 

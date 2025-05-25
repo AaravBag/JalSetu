@@ -221,7 +221,7 @@ const WaterPredictionDetails = () => {
               
               <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0 mb-6">
                 <CardContent className="p-5">
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                     Estimated water requirements based on weather forecast and crop growth stage:
                   </p>
                   
@@ -241,10 +241,10 @@ const WaterPredictionDetails = () => {
                             <td className="py-2.5 px-3">
                               <span className={`text-xs px-2 py-0.5 rounded-full ${
                                 item.currentNeed === "Low" 
-                                  ? "bg-green-50 text-green-600" 
+                                  ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400" 
                                   : item.currentNeed === "Medium" 
-                                    ? "bg-amber-50 text-amber-600" 
-                                    : "bg-red-50 text-red-600"
+                                    ? "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" 
+                                    : "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400"
                               }`}>
                                 {item.currentNeed}
                               </span>
@@ -252,10 +252,10 @@ const WaterPredictionDetails = () => {
                             <td className="py-2.5 px-3">
                               <span className={`text-xs px-2 py-0.5 rounded-full ${
                                 item.nextWeek === "Low" 
-                                  ? "bg-green-50 text-green-600" 
+                                  ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400" 
                                   : item.nextWeek === "Medium" 
-                                    ? "bg-amber-50 text-amber-600" 
-                                    : "bg-red-50 text-red-600"
+                                    ? "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" 
+                                    : "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400"
                               }`}>
                                 {item.nextWeek}
                               </span>
