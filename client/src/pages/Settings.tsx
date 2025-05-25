@@ -191,7 +191,7 @@ const Settings = () => {
               <div className="flex items-center relative z-10">
                 <div className="h-20 w-20 rounded-2xl bg-white/20 dark:bg-gray-700/40 flex items-center justify-center p-1 shadow-lg border border-white/30 dark:border-white/10 pulse-effect">
                   <div className="h-full w-full rounded-xl bg-white/30 dark:bg-gray-600/50 flex items-center justify-center backdrop-blur-sm">
-                    <User className="h-10 w-10 text-white" />
+                    <User className="h-10 w-10 text-blue-500 dark:text-white" />
                   </div>
                 </div>
                 <div className="ml-5">
