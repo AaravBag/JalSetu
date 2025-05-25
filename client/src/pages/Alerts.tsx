@@ -1,129 +1,98 @@
+import React, { useState } from "react";
 import { Bell, XCircle, ShieldAlert, Droplet, Leaf, DropletIcon, Trash2, Check } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BottomNavigation from "@/components/BottomNavigation";
-import { useTheme } from "@/context/ThemeContext";
-import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+// Alert types
 type AlertType = "info" | "warning" | "danger";
 
-interface Alert {
+// Alert interface
+interface AlertItem {
   id: number;
   title: string;
   message: string;
   time: string;
   type: AlertType;
-  icon: JSX.Element;
+  icon: React.ReactNode;
 }
 
+// Sample alert data
+const sampleAlerts: AlertItem[] = [
+  { 
+    id: 1, 
+    title: "Low Soil Moisture", 
+    message: "Field 2 moisture level is below 40%. Consider irrigation.",
+    time: "2 hours ago",
+    type: "warning",
+    icon: <DropletIcon />
+  },
+  { 
+    id: 2, 
+    title: "Pest Detection Alert", 
+    message: "Possible pest infestation detected in north section. Inspect crops.",
+    time: "Yesterday",
+    type: "danger",
+    icon: <ShieldAlert /> 
+  },
+  { 
+    id: 3, 
+    title: "Optimal Watering Time", 
+    message: "Best time to water crops is now, based on weather forecast.",
+    time: "Today",
+    type: "info",
+    icon: <Droplet /> 
+  },
+  { 
+    id: 4, 
+    title: "Nutrient Deficiency", 
+    message: "Field 1 showing signs of nitrogen deficiency. Consider fertilization.",
+    time: "2 days ago",
+    type: "warning",
+    icon: <Leaf /> 
+  },
+  { 
+    id: 5, 
+    title: "Irrigation System Maintenance", 
+    message: "Your irrigation system is due for maintenance. Schedule service soon.",
+    time: "3 days ago",
+    type: "info",
+    icon: <Bell /> 
+  },
+  { 
+    id: 6, 
+    title: "Weather Alert", 
+    message: "Heavy rain expected tomorrow. Consider adjusting irrigation schedule.",
+    time: "4 days ago",
+    type: "warning",
+    icon: <Droplet /> 
+  },
+  { 
+    id: 7, 
+    title: "Sensor Offline", 
+    message: "Field 3 moisture sensor is offline. Please check connection.",
+    time: "5 days ago",
+    type: "danger",
+    icon: <ShieldAlert /> 
+  },
+  { 
+    id: 8, 
+    title: "Crop Growth Report", 
+    message: "Your wheat crop is growing at an optimal rate. Keep up the good work!",
+    time: "1 week ago",
+    type: "info",
+    icon: <Leaf /> 
+  }
+];
+
+// Alert page component
 const Alerts = () => {
   const { toast } = useToast();
-  
-  // Sample alerts for demonstration
-  const initialAlerts: Alert[] = [
-    { 
-      id: 1, 
-      title: "Low Soil Moisture", 
-      message: "Field 2 moisture level is below 40%. Consider irrigation.",
-      time: "2 hours ago",
-      type: "warning",
-      icon: <DropletIcon />
-    },
-    { 
-      id: 2, 
-      title: "Pest Detection Alert", 
-      message: "Possible pest infestation detected in north section. Inspect crops.",
-      time: "Yesterday",
-      type: "danger",
-      icon: <ShieldAlert /> 
-    },
-    { 
-      id: 3, 
-      title: "Optimal Watering Time", 
-      message: "Best time to water crops is now, based on weather forecast.",
-      time: "Today",
-      type: "info",
-      icon: <Droplet /> 
-    },
-    { 
-      id: 4, 
-      title: "Nutrient Deficiency", 
-      message: "Field 1 showing signs of nitrogen deficiency. Consider fertilization.",
-      time: "2 days ago",
-      type: "warning",
-      icon: <Leaf /> 
-    },
-    { 
-      id: 5, 
-      title: "Irrigation System Maintenance", 
-      message: "Your irrigation system is due for maintenance. Schedule service soon.",
-      time: "3 days ago",
-      type: "info",
-      icon: <Bell /> 
-    },
-    { 
-      id: 6, 
-      title: "Weather Alert", 
-      message: "Heavy rain expected tomorrow. Consider adjusting irrigation schedule.",
-      time: "4 days ago",
-      type: "warning",
-      icon: <Droplet /> 
-    },
-    { 
-      id: 7, 
-      title: "Sensor Offline", 
-      message: "Field 3 moisture sensor is offline. Please check connection.",
-      time: "5 days ago",
-      type: "danger",
-      icon: <ShieldAlert /> 
-    },
-    { 
-      id: 8, 
-      title: "Crop Growth Report", 
-      message: "Your wheat crop is growing at an optimal rate. Keep up the good work!",
-      time: "1 week ago",
-      type: "info",
-      icon: <Leaf /> 
-    }
-  ];
-  
-  // State to manage visible alerts and display count
-  const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
+  const [alertsList, setAlertsList] = useState<AlertItem[]>(sampleAlerts);
   const [visibleCount, setVisibleCount] = useState(4);
   
-  // Handler to dismiss a single alert
-  const dismissAlert = useCallback((id: number) => {
-    setAlerts(prevAlerts => prevAlerts.filter(alert => alert.id !== id));
-    toast({
-      title: "Alert Dismissed",
-      description: "The alert has been removed from your list."
-    });
-  }, [toast]);
-  
-  // Handler to clear all alerts
-  const clearAllAlerts = useCallback(() => {
-    setAlerts([]);
-    toast({
-      title: "All Alerts Cleared",
-      description: "Your alerts have been cleared."
-    });
-  }, [toast]);
-  
-  // Handler to load more alerts
-  const loadMoreAlerts = useCallback(() => {
-    setVisibleCount(prev => Math.min(prev + 4, alerts.length));
-    toast({
-      title: "Alerts Loaded",
-      description: "Showing more alerts from your history."
-    });
-  }, [alerts.length, toast]);
-  
-  // Get only the alerts that should be visible based on the current count
-  const visibleAlerts = alerts.slice(0, visibleCount);
-  
-  // Style utility function for different alert types
+  // Get styles based on alert type
   const getAlertStyles = (type: AlertType) => {
     switch(type) {
       case "danger":
@@ -147,6 +116,36 @@ const Alerts = () => {
         };
     }
   };
+  
+  // Handle dismissing a single alert
+  const handleDismiss = (id: number) => {
+    setAlertsList(alertsList.filter(alert => alert.id !== id));
+    toast({
+      title: "Alert Dismissed",
+      description: "The alert has been removed from your list."
+    });
+  };
+  
+  // Handle clearing all alerts
+  const handleClearAll = () => {
+    setAlertsList([]);
+    toast({
+      title: "All Alerts Cleared",
+      description: "Your alerts have been cleared."
+    });
+  };
+  
+  // Handle loading more alerts
+  const handleLoadMore = () => {
+    setVisibleCount(prev => Math.min(prev + 4, alertsList.length));
+    toast({
+      title: "Alerts Loaded",
+      description: "Showing more alerts from your history."
+    });
+  };
+  
+  // Visible alerts based on current visible count
+  const visibleAlerts = alertsList.slice(0, visibleCount);
 
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col relative bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 pb-20 transition-colors duration-300">
@@ -155,15 +154,6 @@ const Alerts = () => {
         <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-red-500 opacity-10 animate-pulse"></div>
         <div className="absolute top-20 -left-10 w-36 h-36 rounded-full bg-amber-500 opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute top-40 right-20 w-24 h-24 rounded-full bg-blue-500 opacity-10 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        
-        {/* Alert icon pattern in background */}
-        <div className="absolute top-0 left-0 right-0 h-40 opacity-5">
-          <div className="flex justify-between px-10 pt-20">
-            <Bell className="h-8 w-8" />
-            <ShieldAlert className="h-8 w-8" />
-            <XCircle className="h-8 w-8" />
-          </div>
-        </div>
       </div>
       
       <header className="px-6 pt-12 pb-4 relative z-10">
@@ -182,30 +172,23 @@ const Alerts = () => {
       
       <main className="flex-1 px-5 pt-2 pb-4 overflow-y-auto z-10">
         <div className="space-y-4">
-          {alerts.length > 0 ? (
+          {alertsList.length > 0 ? (
             <>
               <div className="flex justify-between items-center mb-4">
                 <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-100 dark:border-gray-700">
                   <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                    Showing {visibleAlerts.length} of {alerts.length} alerts
+                    Showing {visibleAlerts.length} of {alertsList.length} alerts
                   </p>
                 </div>
-                {alerts.length > 0 && (
-                  <button 
-                    type="button"
-                    className="flex items-center text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm px-3 py-1"
-                    onClick={() => {
-                      setAlerts([]);
-                      toast({
-                        title: "All Alerts Cleared",
-                        description: "Your alerts have been cleared."
-                      });
-                    }}
-                  >
-                    <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                    Clear All
-                  </button>
-                )}
+                
+                <button 
+                  type="button"
+                  className="flex items-center text-xs rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-800/40 shadow-sm px-3 py-1"
+                  onClick={handleClearAll}
+                >
+                  <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                  Clear All
+                </button>
               </div>
             
               {visibleAlerts.map((alert, index) => {
@@ -215,7 +198,6 @@ const Alerts = () => {
                   <Card 
                     key={alert.id} 
                     className={`rounded-2xl shadow-md overflow-hidden border glass-effect ${styles.container} dark:bg-opacity-10 dark:border-opacity-20 scale-in enhanced-card`}
-                    style={{ animationDelay: `${index * 0.08}s` }}
                   >
                     <CardContent className="p-5 relative">
                       <div className="flex">
@@ -230,8 +212,9 @@ const Alerts = () => {
                               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1.5 pr-6">{alert.message}</p>
                             </div>
                             <button 
+                              type="button"
                               className="text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors"
-                              onClick={() => dismissAlert(alert.id)}
+                              onClick={() => handleDismiss(alert.id)}
                             >
                               <XCircle className="h-5 w-5" />
                             </button>
@@ -248,18 +231,12 @@ const Alerts = () => {
                 );
               })}
               
-              {visibleCount < alerts.length && (
+              {visibleCount < alertsList.length && (
                 <div className="flex justify-center mt-6 fade-in">
                   <button 
                     type="button"
                     className="rounded-full text-xs font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2"
-                    onClick={() => {
-                      setVisibleCount(prev => Math.min(prev + 4, alerts.length));
-                      toast({
-                        title: "Alerts Loaded",
-                        description: "Showing more alerts from your history."
-                      });
-                    }}
+                    onClick={handleLoadMore}
                   >
                     Load More
                   </button>
