@@ -61,7 +61,7 @@ const WaterQualityCard = ({ qualityMetrics = [], farmId = 1 }: WaterQualityCardP
         <div className="rounded-full bg-blue-100 p-1.5 mr-2 shadow-sm">
           <TestTube className="h-4 w-4 text-blue-600" />
         </div>
-        Water Quality Status
+        {t.waterQuality}
       </h3>
       
       <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0 card-highlight enhanced-card">
@@ -92,7 +92,7 @@ const WaterQualityCard = ({ qualityMetrics = [], farmId = 1 }: WaterQualityCardP
           
           <div className="mt-4 text-right">
             <Link href={`/water-quality/${farmId}`} className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-medium transition-colors hover:bg-blue-600 shadow-sm">
-              View Details
+              {t.viewDetails}
               <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
             </Link>
           </div>

@@ -1,6 +1,7 @@
 import { Cloud, Sun, CloudRain, CloudSun, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ForecastDay {
   day: string;
@@ -21,6 +22,7 @@ const WaterPredictionCard = ({
   forecast = [],
   farmId = 1
 }: WaterPredictionCardProps) => {
+  const { t } = useLanguage();
   
   const getWeatherIcon = (weather: string) => {
     switch (weather) {
@@ -67,7 +69,7 @@ const WaterPredictionCard = ({
         <div className="rounded-full bg-blue-100 p-1.5 mr-2 shadow-sm">
           <Cloud className="h-4 w-4 text-blue-600" />
         </div>
-        Water Prediction
+        {t.weatherPrediction}
       </h3>
       
       <Card className="glass-effect rounded-3xl shadow-lg overflow-hidden border-0 card-highlight enhanced-card">
@@ -111,7 +113,7 @@ const WaterPredictionCard = ({
           
           <div className="mt-5 text-right">
             <Link href={`/water-prediction/${farmId}`} className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-medium transition-colors hover:bg-blue-600 shadow-sm">
-              View Details
+              {t.viewDetails}
               <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
             </Link>
           </div>

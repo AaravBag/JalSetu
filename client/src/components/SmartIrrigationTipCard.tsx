@@ -2,6 +2,7 @@ import { Lightbulb, Check, Sparkles, ArrowRight, Droplet, Clock, Zap } from "luc
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface SmartIrrigationTipCardProps {
   tip: string;
@@ -12,6 +13,7 @@ const SmartIrrigationTipCard = ({
   tip,
   farmId = 1
 }: SmartIrrigationTipCardProps) => {
+  const { t } = useLanguage();
   // Default tip if none is provided
   const displayTip = tip || "Based on your soil type and current moisture levels, water your crops early morning (5-7 AM) to minimize evaporation and maximize absorption.";
   return (
