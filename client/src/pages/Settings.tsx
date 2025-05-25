@@ -31,7 +31,22 @@ const Settings = () => {
     });
   };
   
-  const settingsSections = [
+  // Define the types for the settings items
+  type SettingsItem = {
+    id: string;
+    label: string;
+    icon: React.ReactNode;
+    action: React.ReactNode;
+    onClick?: () => void;
+    subtext?: string;
+  };
+  
+  type SettingsSection = {
+    title: string;
+    items: SettingsItem[];
+  };
+  
+  const settingsSections: SettingsSection[] = [
     {
       title: "Account",
       items: [
@@ -210,16 +225,13 @@ const Settings = () => {
               <Card className="rounded-3xl shadow-md overflow-hidden border-0 bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm glass-effect enhanced-card">
                 <CardContent className="p-0">
                   {section.items.map((item, index) => {
-                    // Only add onClick handler if it exists
-                    const clickProps = item.onClick ? { onClick: item.onClick } : {};
-                    
                     return (
                       <div 
                         key={item.id}
                         className={`flex items-center justify-between p-5 ${
                           index !== section.items.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : ''
                         } hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors`}
-                        {...clickProps}
+                        onClick={item.onClick}
                         style={{ 
                           cursor: item.onClick ? 'pointer' : 'default',
                           animationDelay: `${idx * 0.15 + index * 0.08}s`
