@@ -170,8 +170,21 @@ export class DatabaseStorage implements IStorage {
   }
   
   async createWeatherPrediction(prediction: InsertWeatherPrediction): Promise<WeatherPrediction> {
-    const [newPrediction] = await db.insert(weatherPredictions).values(prediction).returning();
-    return newPrediction;
+    // Parse forecast if it's a string
+    const forecastData = typeof prediction.forecast === 'string' 
+      ? prediction.forecast 
+      : JSON.stringify(prediction.forecast);
+    
+    const [newPrediction] = await db.insert(weatherPredictions).values({
+      ...prediction,
+      forecast: forecastData
+    }).returning();
+    
+    // Parse forecast back to object for return
+    return {
+      ...newPrediction,
+      forecast: JSON.parse(newPrediction.forecast)
+    };
   }
   
   // Irrigation Tip methods
@@ -255,7 +268,9 @@ export class DatabaseStorage implements IStorage {
       waterPrediction: weatherPrediction ? {
         message: weatherPrediction.message,
         advice: weatherPrediction.advice,
-        forecast: weatherPrediction.forecast
+        forecast: typeof weatherPrediction.forecast === 'string' 
+          ? JSON.parse(weatherPrediction.forecast) 
+          : weatherPrediction.forecast
       } : {
         message: "No weather prediction available",
         advice: "Check back later for irrigation recommendations",

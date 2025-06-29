@@ -2,9 +2,10 @@ import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import * as schema from "@shared/schema";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL must be set. Did you forget to provision a database?");
-}
+// Use a local SQLite file for development and production
+const databaseUrl = process.env.DATABASE_URL || 'file:./app.db';
 
-const client = createClient({ url: process.env.DATABASE_URL });
+console.log('Database URL:', databaseUrl);
+
+const client = createClient({ url: databaseUrl });
 export const db = drizzle(client, { schema });

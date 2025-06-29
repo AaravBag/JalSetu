@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, primaryKey } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer, blob } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -6,70 +6,70 @@ import { relations } from "drizzle-orm";
 // Define all tables first, then relations
 
 // User schema
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   firstName: text("first_name"),
   lastName: text("last_name"),
   email: text("email"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Farm schema
-export const farms = pgTable("farms", {
-  id: serial("id").primaryKey(),
+export const farms = sqliteTable("farms", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   location: text("location").notNull(),
   userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   status: text("status").default("Your farm is thriving"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Fields schema (for soil moisture readings)
-export const fields = pgTable("fields", {
-  id: serial("id").primaryKey(),
+export const fields = sqliteTable("fields", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Water Quality schema
-export const waterQualities = pgTable("water_qualities", {
-  id: serial("id").primaryKey(),
+export const waterQualities = sqliteTable("water_qualities", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   phLevel: text("ph_level").notNull(),
   tds: text("tds").notNull(),
   temperature: text("temperature").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Soil Moisture schema
-export const soilMoistures = pgTable("soil_moistures", {
-  id: serial("id").primaryKey(),
+export const soilMoistures = sqliteTable("soil_moistures", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   fieldId: integer("field_id").notNull().references(() => fields.id, { onDelete: "cascade" }),
   moistureLevel: integer("moisture_level").notNull(),
   status: text("status").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Weather Prediction schema
-export const weatherPredictions = pgTable("weather_predictions", {
-  id: serial("id").primaryKey(),
+export const weatherPredictions = sqliteTable("weather_predictions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   message: text("message").notNull(),
   advice: text("advice").notNull(),
-  forecast: jsonb("forecast").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  forecast: text("forecast").notNull(), // JSON string
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Irrigation Tips schema
-export const irrigationTips = pgTable("irrigation_tips", {
-  id: serial("id").primaryKey(),
+export const irrigationTips = sqliteTable("irrigation_tips", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   farmId: integer("farm_id").notNull().references(() => farms.id, { onDelete: "cascade" }),
   tip: text("tip").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 });
 
 // Define relations after all tables are defined
